@@ -24,18 +24,19 @@ description:
 NextJS is a popular framework for building React-based web applications. It comes with many features, including server-side rendering, automatic code splitting, and optimized performance. In this article, we will explore how to create a component within NextJS.
 
 # What is a Component?
-A component is a reusable piece of code that represents a specific part of a web page. It can be a button, form, navigation menu, or any other element that you want to use across multiple pages. Components can be used to build complex user interfaces by composing them together.
+
+Components are reusable piece of code that represents a specific part of a web page. It can be a button, form, navigation menu, or any other element that you want to use across multiple pages. Components can be used to build complex user interfaces by composing them together as simple html tags.
 
 ## Creating a Component in NextJS
 
-To create a component in NextJS, you need to follow these steps:
+To create a component in NextJS, you'll need to follow these steps:
 
- 1: Create a new file with a .jsx or .tsx extension in the components directory of your NextJS project. For example, if you want to create a button component, you can create a file named Button.jsx or Button.tsx in the components directory.
+ 1. Create a new file with a .jsx or .tsx extension in the components directory of your NextJS project. For example, if you want to create a button component, you can create a file named button.jsx or button.tsx (depending on if you are using typescript or not) in the `/components` directory.
 
- 2: Define your component as a function that returns a JSX element. For example, here's how you can define a simple button component:
+ 2. Define your component as a function that returns a `jsx` or `tsx` element. For example, here's how you can define a simple button component:
 
 ```jsx
-function Button(props) {
+export default function Button(props) {
   return (
     <button className={props.className} onClick={props.onClick}>
       {props.label}
@@ -44,33 +45,27 @@ function Button(props) {
 }
 ```
 
-In this example, the Button function takes a props object as its parameter, which contains properties like className, onClick, and label. The function returns a `<button>` element with the `className`, `onClick`, and `label` properties set to the values provided by the props object.
+This button function takes a `props` object as its parameter, which contains properties like `className`, `onClick`, and `label`. The function returns a `<button>` element with the `className`, `onClick`, and `label` properties set to the values provided by the props object.
 
- 3: Export your component from the file. For example, you can export the Button component like this:
+Be sure to have `export default` before the function definition. This will allow you to import the component from other files in your NextJS project.
 
-```jsx
-export default Button;
-```
-
- 4: Use your component in your NextJS pages by importing it from the components directory. For example, if you want to use the Button component in a page named HomePage.jsx, you can import it like this:
+3. To use your component in your NextJS pages you'll need to import it from the `/components` directory. For example, if you want to use the Button component in a page named HomePage.jsx, you can import it like this:
 ```jsx
 import Button from '../components/Button';
 ```
 
-You can then use the Button component in your HomePage page like any other JSX element:
+You can then use call the `<Button />` component in your HomePage page. If you have defined the `label` and `onClick` properties in the props object, you can pass them to the `<Button />` component as well. For example:
 
 ```jsx
 function HomePage() {
   return (
     <div>
       <h1>Welcome to my NextJS app!</h1>
-      <Button label="Click me" onClick={() => alert('Button clicked!')} />
+      <Button label="Click me" onClick={() => alert('Button clicked!')} /> <--Here
     </div>
   );
 }
 ```
-
-In this example, the HomePage function returns a `<div>` element that contains an `<h1>` element and a `<Button>` element.
 
 ## Conclusion
 
