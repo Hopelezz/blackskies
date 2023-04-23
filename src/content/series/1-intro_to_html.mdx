@@ -1,0 +1,156 @@
+---
+author: Mark
+pubDatetime: 2023-04-22T10:30:00Z
+title: "Introduction to HTML: The Basics of Building a Web Page"
+postSlug: 1-intro_to_html
+featured: false
+draft: false
+tags:
+  - HTML
+  - Tags
+  - Elements
+ogImage: ""
+description:
+  Want to learn how to build web pages? Don't know where to start? Then this is for you.
+---
+
+`HTML` (Hypertext Markup Language) is a programming language used to build web pages. HTML provides the structure and content of a web page, allowing browsers to interpret and render the page for users.
+
+In this article, we will cover the basics of HTML and how to build a simple web page. Later on in the series, we will cover more advanced topics such as CSS and JavaScript.
+
+## What is HTML?
+
+HTML is a markup language that uses tags to define the structure and content of a web page. HTML tags are used to define the elements of a web page, such as headings, paragraphs, images, and links. You can even create custome tags to define your own elements. A lot of modern frameworks use this to great effect. Allowing them create components that can be reused throughout an application. In a sense Tags are the building blocks of HTML.
+
+## HTML Tags
+
+The basic structure of a tag starts with an opening tag and ends with a closing tag. The opening tag is the name of the element surrounded by angle brackets. The closing tag is the same as the opening tag, except it has a forward slash before the element name. The content of the element is placed between the opening and closing tags.
+
+```html
+<> <-- Opening Tag
+</> <-- Closing Tag
+```
+
+```html
+<h1>Heading</h1> <-- Header 1 Tag
+<p>Paragraph</p> <-- Paragraph Tag
+<img src="image.jpg" alt="Image"> <-- Image Tag
+<a href="https://www.google.com">Link</a> <-- Anchor Tag
+```
+
+## Building Blocks of HTML
+
+HTML is made up of a number of different elements. These elements are used to define the structure and content of a web page. The HTML document structure is made up of the following elements:
+
+-   `<!DOCTYPE html>` - Defines the document type
+-   `<html>` - Defines the root of an HTML document
+-   `<head>` - Contains meta information about the document
+-   `<title>` - Defines a title for the document
+-   `<body>` - Defines the document's body
+-   `<h1>` - Defines a large heading (h1 is the largest, h6 is the smallest)
+-   `<p>` - Defines a paragraph
+
+These can be used to build a simple web page. The following example shows a basic HTML document with a heading and paragraph.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <h1>My First Heading</h1>
+    <p>My first paragraph.</p>
+  </body>
+</html>
+```
+Ther are other elements that can be used to build a web page. These include:
+
+-   `<div>` - Defines a section in a document
+-   `<span>` - Defines a section in a document
+-   `<img>` - Defines an image
+-   `<a>` - Defines a hyperlink
+-   `<table>` - Defines a table
+-   `<form>` - Defines an HTML form for user input
+-   `<input>` - Defines an input control
+-   `<button>` - Defines a clickable button
+
+> **Note:** The above list is not exhaustive. There are many more elements that can be used to build a web page.
+
+
+## Tag Attributes
+
+HTML attributes provide additional information about HTML elements. Attributes are always specified in the opening tag. Attributes usually come in name/value pairs like: name="value". Like so:
+
+```html
+<element attribute="value"></element>
+```
+
+The following example shows an image tag with an `src` and `alt` attribute.
+
+```html
+<img src="image.jpg" alt="Image">
+```
+Each HTML element can have different attributes based on the particlular element. For example: 
+- `<img>` element has a `src` and `alt` attribute. 
+- `<a>` element has a `href` attribute.
+- `<input>` element has a `type` attribute.
+
+## Commenting Code
+
+One of the most useful features of HTML is the ability to add comments. Comments are not displayed in the browser, but they can be very useful for developers when reading the source code. Comments are added using the following syntax:
+
+```html
+<!-- This is a comment -->
+```
+> **Note:** Comments are not the same in all languages. In JavaScript comments use `//` and in CSS use `/* */`.
+
+If you are using VScode you can press `Ctrl + /` to add a comment. or `Ctrl + Shift + /` to add a block comment which is useful for commenting out multiple lines of code.
+
+Do note that you can use comments to disable code. This is useful for testing and debugging. For example:
+
+```html
+<!-- <h1>My First Heading</h1> -->
+```
+
+## How to make hyperlinks
+
+Hyperlinks are used to link from one page to another. The `<a>` tag defines a hyperlink. Also known as an anchor. It has an attribute called `href` which indicates the link's destination. The destination can be a full URL or a URL fragment. The following example shows a link to the Google homepage.
+
+```html
+<a href="https://www.google.com">Google</a> <-- full URL
+<a href="/series/1-intro_to_html">Intro to HTML</a> <-- URL fragment
+```
+
+Full links are links that point to a different website. URL fragments are links that point to a different page on the same website. In the example above, the first link points to the Google homepage. The second link points to the Intro to HTML article on this website.
+
+## How to add images
+
+The `<img>` tag is used to embed an image in a web page. The `src` attribute specifies the path to the image to be displayed. The `alt` attribute specifies an alternate text for the image, if the image cannot be displayed. The following example shows an image tag with a `src` and `alt` attribute.
+
+```html
+<img src="image.jpg" alt="Image" />
+```
+
+> **Note:** The `alt` attribute is very important. It is used for accessibility and is displayed if the image cannot be displayed.
+
+> **Note:** The `src` attribute can also be a full URL. Don't use href attribute as this is not valid img attribute.
+
+## Closing Tags
+
+Earlier we mentioned opening and closing tags. These tags can be handled in two different ways. The first way is to use a `closing` tag. The second way is to use a `self-closing` tag. The following example shows a paragraph tag with a closing tag.
+
+```html
+<a href="https://www.google.com">Google</a> <-- Closing Tag
+<img src="image.jpg" alt="Image" />  <-- Self-Closing Tag
+```
+
+## In closing
+
+HTML is the foundation of web development and is used to create the structure and content of websites. Understanding the basics of HTML is essential for anyone looking to build a website. In this article, we covered the most important HTML tags and attributes, as well as how to nest elements and create comments. With this knowledge, you should be able to create simple web pages and have a good understanding of how HTML works. 
+
+## Further Reading
+
+W3 Schools has a great HTML reference and tutorial. I highly recommend checking them out.
+- [HTML Reference](https://www.w3schools.com/tags/default.asp)
+- [HTML Tutorial](https://www.w3schools.com/html/default.asp)
