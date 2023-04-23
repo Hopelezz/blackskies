@@ -25,4 +25,12 @@ const { href, className, ariaLabel, title, disabled = false } = Astro.props;
   a {
     @apply hover:text-skin-accent;
   }
+  /* tooltip */
+  a::before {
+    @apply absolute z-10 hidden p-2 text-xs rounded whitespace-nowrap pointer-events-none group-hover:block;
+    content: attr(aria-label);
+    transform: translateX(-50%);
+    top: -1.5rem;
+    left: 50%;
+  }
 </style>

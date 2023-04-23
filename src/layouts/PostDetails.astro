@@ -5,6 +5,7 @@ import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
 import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
+import PageProgress from "@components/PageProgress.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -21,6 +22,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
 ---
 
 <Layout title={title} author={author} description={description} ogImage={ogUrl}>
+  <PageProgress />
   <Header />
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
