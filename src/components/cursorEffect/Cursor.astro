@@ -34,11 +34,20 @@
         }
     });
 
-    window.addEventListener('touchmove', function(event) { // listens for touch movement
-        event.preventDefault(); // prevent default touch behavior
+    // on touchstart event start drawing particles
+    window.addEventListener('touchstart', function(event) { // listens for touch movement
         mouse.x = event.touches[0].clientX; // get touch x coordinate
         mouse.y = event.touches[0].clientY; // get touch y coordinate
-        for (let i = 0; i < 5; i++) { // 3 is the number of particles
+        for (let i = 0; i < 3; i++) { // 3 is the number of particles
+            spots.push(new Particle()); // add a new particle
+        }
+    });
+
+    window.addEventListener('touchmove', function(event) { 
+        // based on touchmove event start drawing particles increase the number of particles
+        mouse.x = event.touches[0].clientX; // get touch x coordinate
+        mouse.y = event.touches[0].clientY; // get touch y coordinate
+        for (let i = 0; i < 10; i++) { // 3 is the number of particles
             spots.push(new Particle()); // add a new particle
         }
     });
@@ -108,14 +117,12 @@
         mouse.y = undefined;
         Infinity/0;
     });
-    
-    // touched and not scrolling
-    window.addEventListener('touchstart', function(){
+
+    window.addEventListener('touchend', function(){
         mouse.x = undefined;
         mouse.y = undefined;
+        Infinity/0;
     });
-
-    
     
     animate();
 </script>
