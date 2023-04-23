@@ -1,0 +1,79 @@
+---
+author: Mark
+pubDatetime: 2023-04-21T22:09:00Z
+title: "Async and Await: Simplifying Asynchronous JavaScript"
+postSlug: 5-asnyc_and_await_simplified
+featured: true
+draft: false
+tags:
+  - JavaScript
+  - Asynchronous
+  - Async
+  - Await
+  - Promises
+ogImage: "/assets/images/async_and_await.jpg"
+description:
+    Get rid of the complexities of asynchronous programming in JavaScript with the power of async and await.
+---
+
+## Async and Await: Simplifying Asynchronous JavaScript
+
+Asynchronous programming is an essential part of modern JavaScript development. It allows us to write code that doesn't block the main thread, making it possible to perform time-consuming tasks without slowing down the user interface. However, asynchronous programming can be complex and difficult to manage. That's where `async` and `await` come in. In this article, we'll explore how to use `async` and `await` to simplify asynchronous JavaScript programming.
+
+## What are Promises?
+
+Before we dive into `async` and `await`, let's briefly review promises, which are a fundamental part of asynchronous programming in JavaScript.
+
+Promises are objects that represent a value that may not be available yet but will be in the future. Promises have three states:
+
+- Pending: The promise is waiting for a value to be available.
+- Fulfilled: The promise has a value available.
+- Rejected: The promise has an error.
+
+Promises are created using the `Promise` constructor and have a `then` method that allows you to handle the resolved value or the rejected error.
+
+## Async and Await
+
+`async` and `await` are syntactic sugar built on top of promises that make asynchronous programming in JavaScript more readable and easier to manage.
+
+The `async` keyword is used to define a function that returns a promise. Inside an async function, you can use the `await` keyword to pause the execution of the function until a promise is resolved. When the promise is resolved, the `await` keyword returns the resolved value.
+
+Here's an example of using `async` and `await` to fetch data from an API:
+
+```js
+async function getData() {
+  const response = await fetch('https://api.example.com/data');
+  const data = await response.json();
+  return data;
+}
+
+getData().then((data) => console.log(data));
+```
+
+In this example, we define an `async` function called `getData` that uses the `await` keyword to wait for the response from the API and then wait for the response to be parsed as JSON. The `getData` function returns a promise that resolves to the data returned by the API. We then call the `getData` function and log the returned data to the console.
+
+## Error Handling with Async and Await
+
+`async` and `await` also make error handling in asynchronous programming easier. When an error occurs inside an `async` function, the function automatically rejects the promise it returns. You can use a `try/catch` block to catch errors that occur inside an `async` function.
+
+Here's an example of error handling with `async` and `await`:
+
+```js
+async function getData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+getData().then((data) => console.log(data));
+```
+In this example, we use a `try/catch` block to catch any errors that occur while fetching data from the API. If an error occurs, we log it to the console and return `null`.
+
+## Conclusion
+
+`async` and `await` make asynchronous programming in JavaScript easier to manage. They allow you to write asynchronous code that looks and behaves like synchronous code. If you're new to asynchronous programming in JavaScript, I recommend that you start by learning about promises. Once you understand promises, you can use `async` and `await` to simplify your asynchronous code. By using async and await, you can write more readable and maintainable code while still making use of the full power of asynchronous programming.
