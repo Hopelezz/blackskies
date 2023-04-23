@@ -73,7 +73,8 @@
                 const dx = spots[i].x - spots[j].x; // x distance
                 const dy = spots[i].y - spots[j].y; // distance between two particles
                 const distance = Math.sqrt(dx * dx + dy * dy);  // distance between two points
-                if (distance < 90){
+                
+                if (distance < 90){ // if distance is less than 90
                     ctx.beginPath(); // start a new path
                     ctx.strokeStyle = spots[i].color; // color of the lines
                     ctx.lineWidth = spots[i].size / 10; // width of the line
@@ -107,6 +108,14 @@
         mouse.y = undefined;
         Infinity/0;
     });
+    
+    // touched and not scrolling
+    window.addEventListener('touchstart', function(){
+        mouse.x = undefined;
+        mouse.y = undefined;
+    });
 
+    
+    
     animate();
 </script>
