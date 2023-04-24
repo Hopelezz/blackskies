@@ -15,3 +15,17 @@ export const blogSchema = z
   .strict();
 
 export type BlogFrontmatter = z.infer<typeof blogSchema>;
+
+export const seriesSchema = z
+  .object({
+    title: z.string(),
+    seriesSlug: z.string().optional(),
+    featured: z.boolean().optional(),
+    draft: z.boolean().optional(),
+    tags: z.array(z.string()).default(["others"]),
+    ogImage: z.string().optional(),
+    description: z.string(),
+  })
+  .strict();
+
+export type SeriesFrontmatter = z.infer<typeof seriesSchema>;

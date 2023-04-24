@@ -1,0 +1,93 @@
+---
+author: Mark
+pubDatetime: 2023-04-24T18:18:00Z
+title: "An Introduction to CSS: Styling Your Web Pages [Part 2]"
+postSlug: 3-intro_to_css_pt2
+featured: true
+draft: true
+tags:
+    - CSS
+    - StyleSheet
+    - Web_Development
+    - Frontend
+    - Web_Design
+    - HTML 
+ogImage: ""
+description:
+    "In this article, we will continue our introduction to CSS by looking at how to add layout to our web pages."
+---
+
+> If you missed our last post in the series you can find it here: [Intro to CSS [Part 1]](/posts/2-intro_to_css_pt1).
+
+## Table of Contents
+
+## Lets talk Layout
+
+In the last article, we looked at how to style the content of our web pages. In this article, we will continue our introduction to CSS by looking at how to modify the layout of our pages. We will also look at how to use CSS to control the size and spacing of elements on a page.
+
+## The Box Model
+
+To start we should get familiarized with the box model. This is a way of describing how elements are laid out on a web page. It consists of four parts:
+
+- `Content area`: the area inside the element's border.
+- `Padding`: the space between the content area and the border.
+- `Border`: the line that separates the `padding` from the `margin`. 
+- `Margin`: the space between the `border` and the edge of the page.
+
+```lua
++-----------------+
+|     margin      |
+|                 |
+| +-------------+ |
+| |   border    | |
+| |             | |
+| | +---------+ | |
+| | | padding | | |
+| | |         | | |
+| | | content | | |
+| | |         | | |
+| | +---------+ | |
+| |             | |
+| +-------------+ |
+|                 |
++-----------------+
+```
+
+> To see this in action you can right-click in your browser and select `Inspect Element`. This will open the developer tools and you can hover over any element on the page.
+
+You can use CSS properties like `padding`, `border`, and `margin` to control the size and spacing of the different areas of an element, but more on this later.
+
+## CSS Units
+
+One of the biggest parts of styling is figuring out how to scale content. Before we can do that we need to understand the unquie units of measure within CSS. Here are some of the most commonly used units:
+
+- `px`: Pixels (1px = 1/96th of 1in)
+- `em`: Relative to the `font size` of the `element`
+- `rem`: Relative to the `font size` of the `root element`
+- `vw`: Relative to 1% of the `width` of the `viewport`
+- `vh`: Relative to 1% of the `height` of the `viewport`
+- `%`: Relative to the `parent element`
+
+## CSS Layouts
+
+CSS provides a range of techniques for creating layouts on a web page. Here are some of the most commonly used techniques:
+
+- `Floats`: Allows you to move an element to the left or right of its container.
+- `Flexbox`: Allows you to align and distribute content within a container.
+- `Grid`: Allows you to create a grid of columns and rows to lay out content on a page.
+
+## Floats
+
+The `float` property allows you to move an element to the left or right of its container. This is useful for creating layouts where you want to have content on the left and right side of a page. We can use the `float` property to move an element to the left or right of its container.
+
+```css
+/* Float an element to the left */
+.float-left {
+    float: left;
+}
+
+/* Float an element to the right */
+.float-right {
+    float: right;
+}
+```
