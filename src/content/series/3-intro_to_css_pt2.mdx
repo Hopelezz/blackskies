@@ -6,15 +6,14 @@ postSlug: 3-intro_to_css_pt2
 featured: true
 draft: true
 tags:
-    - CSS
-    - StyleSheet
-    - Web_Development
-    - Frontend
-    - Web_Design
-    - HTML 
+  - CSS
+  - StyleSheet
+  - Web_Development
+  - Frontend
+  - Web_Design
+  - HTML
 ogImage: ""
-description:
-    "In this article, we will continue our introduction to CSS by looking at how to add layout to our web pages."
+description: "Lets talk Layouts! We will continue our introduction to CSS by looking at how to create responsive layouts to our web pages."
 ---
 
 > If you missed our last post in the series you can find it here: [Intro to CSS [Part 1]](/posts/2-intro_to_css_pt1).
@@ -23,7 +22,7 @@ description:
 
 ## Lets talk Layout
 
-In the last article, we looked at how to style the content of our web pages. In this article, we will continue our introduction to CSS by looking at how to modify the layout of our pages. We will also look at how to use CSS to control the size and spacing of elements on a page.
+In the last article, we looked at how to style the content of our web pages with CSS Selectors. In this article, we will continue our introduction to CSS by looking at how to modify the layout of our pages. We will also look at how to use CSS to control the size and spacing of elements on a page.
 
 ## The Box Model
 
@@ -31,7 +30,7 @@ To start we should get familiarized with the box model. This is a way of describ
 
 - `Content area`: the area inside the element's border.
 - `Padding`: the space between the content area and the border.
-- `Border`: the line that separates the `padding` from the `margin`. 
+- `Border`: the line that separates the `padding` from the `margin`.
 - `Margin`: the space between the `border` and the edge of the page.
 
 ```lua
@@ -83,11 +82,55 @@ The `float` property allows you to move an element to the left or right of its c
 ```css
 /* Float an element to the left */
 .float-left {
-    float: left;
+  float: left;
 }
 
 /* Float an element to the right */
 .float-right {
-    float: right;
+  float: right;
 }
 ```
+
+## Flexbox
+
+The `flexbox` layout is a one-dimensional layout method for laying out items in rows or columns. It allows you to align and distribute content within a container. The `flexbox` layout is defined by a set of properties that are applied to a parent container. These properties control how the child elements are laid out within the container.
+
+```css
+/* Define a flex container */
+.flex-container {
+  display: flex;
+}
+
+/* Define a flex item */
+.flex-item {
+  flex: 1;
+}
+```
+
+## Grid
+
+The `grid` layout is a two-dimensional layout method for laying out items in rows and columns. It allows you to create a grid of columns and rows to lay out content on a page. The `grid` layout is defined by a set of properties that are applied to a parent container. These properties control how the child elements are laid out within the container.
+
+```css
+/* Define a grid container */
+.grid-container {
+  display: grid;
+}
+
+/* Define a grid item */
+.grid-item {
+  grid-column: 1 / 3;
+}
+```
+
+## To Wrap Up
+
+CSS is a powerful tool for designing and styling web pages. In this article, we covered the basics of CSS, including syntax, selectors, specificity, and layout properties. By mastering these concepts, you can create beautiful, responsive web pages that look great on any device. In the next article, we will look at how to use CSS to create animations and transitions.
+
+## Resources
+
+I highly recomend you check out the following resources to learn more about CSS:
+
+- [CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
+- [CSS Tricks](https://css-tricks.com/)
+- [Flexbox Froggy](https://flexboxfroggy.com/)

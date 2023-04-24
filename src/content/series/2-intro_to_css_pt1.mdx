@@ -6,16 +6,15 @@ postSlug: 2-intro_to_css_pt1
 featured: true
 draft: false
 tags:
-    - CSS
-    - StyleSheet
-    - Web_Development
-    - Frontend
-    - Web_Design
-    - HTML
-    
+  - CSS
+  - StyleSheet
+  - Web_Development
+  - Frontend
+  - Web_Design
+  - HTML
+
 ogImage: ""
-description:
-    This is the 2nd post in the series of guides to Web Dev. In this post, we will learn about the basics of CSS and how to use it to style our web pages.
+description: This is the 2nd post in the series of guides to Web Dev. In this post, we will learn about the basics of CSS and how to use it to style our web pages.
 ---
 
 > If aren't familiar already with HTML you can find that here: [Intro to HTML](/posts/1-intro_to_html).
@@ -57,7 +56,7 @@ For a long time there's the idea of separation of concerns, which means that you
 
 <!-- External CSS -->
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 ```
 
@@ -72,7 +71,7 @@ p {
   color: red;
 }
 ```
-    
+
 ```html
 <p>This text is red.</p>
 <p>This text is red.</p>
@@ -89,6 +88,7 @@ p {
 ```html
 <p class="red-text">This text is red.</p>
 ```
+
 ### ID selectors: target elements with a specific ID attribute.
 
 ```css
@@ -100,10 +100,12 @@ p {
 ```html
 <p id="red-text">This text is red.</p>
 ```
+
 ### Grouping selectors: target multiple elements with the same style.
 
 ```css
-.red-text, .blue-text {
+.red-text,
+.blue-text {
   color: red;
 }
 ```
@@ -116,7 +118,8 @@ p {
 ### Attribute selectors: target elements with a specific attribute value.
 
 ```css
-a[href="https://www.google.com"] {
+a[href="https://www.google.com"]
+{
   color: red;
 }
 ```
@@ -203,15 +206,20 @@ p ~ span {
 
 When multiple CSS rules apply to the same element, the browser uses a set of rules to determine which rule is most specific and should be applied. These rules are called CSS specificity rules. The higher the specificity, the more important the rule is. When considering that CSS is a cascading language, the more specific rule will override the less specific rule regardless of where it appears in the `cascade` on the stylesheet.
 
-| Selector | Specificity | Calculation |
-|----------|-------------|-------------|
-| `P`        | 1           | 1           |
-| `P.test`   | 11          | 1+10        |
-| `P#test`   | 101         | 1+100       |
-| `<p style="color: pink;">` | 1000 | 1000 |
-| `#demo` | 100 | 100 |
-| `.test` | 10 | 10 |
-| `P.test1.test2` | 21 | 1+10+10 |
-| `#navbar p#demo` | 201 | 100+1+100 |
-| `*` | 0 | 0 (universal selector is ignored) |
+| Selector                   | Specificity | Calculation                       |
+| -------------------------- | ----------- | --------------------------------- |
+| `P`                        | 1           | 1                                 |
+| `P.test`                   | 11          | 1+10                              |
+| `P#test`                   | 101         | 1+100                             |
+| `<p style="color: pink;">` | 1000        | 1000                              |
+| `#demo`                    | 100         | 100                               |
+| `.test`                    | 10          | 10                                |
+| `P.test1.test2`            | 21          | 1+10+10                           |
+| `#navbar p#demo`           | 201         | 100+1+100                         |
+| `*`                        | 0           | 0 (universal selector is ignored) |
 
+## Otro
+
+In the next article we'll be covering layouts and how to create responsive websites across all devices!
+
+> You can find the next article in the series here: [Intro to CSS Part 2](/posts/3-intro_to_css_pt2).
