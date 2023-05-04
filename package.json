@@ -1,6 +1,6 @@
 {
-  "name": "astronautical-atmosphere",
-  "version": "2.2.0",
+  "name": "blackskies",
+  "version": "0.0.1",
   "scripts": {
     "dev": "astro check --watch & astro dev",
     "start": "astro dev",

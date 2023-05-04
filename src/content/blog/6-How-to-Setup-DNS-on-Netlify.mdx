@@ -1,0 +1,217 @@
+---
+author: Mark
+pubDatetime: 2023-05-3T26:53:00Z
+title: "How to Set Up DNS on Netlify with Google Workspace"
+postSlug: 6-How-to-Setup-DNS-on-Netlify
+featured: true
+draft: false
+tags:
+  - DNS
+  - Netlify
+  - Google_Workspace
+  - Zapier
+  - DKIM
+  - SPF
+  - CNAME
+  - MX
+  - TXT
+  - records
+  - email
+  - automation
+  - email_forwarding
+  - authentication
+  - email_authentication
+ogImage: ""
+description: Learn how to set up DNS on Netlify with Google Workspace email provider and Zapier automation.
+---
+
+## Table of Contents
+
+## Introduction
+
+If you're using Netlify to host your website, you can also use it to manage your DNS records. On my first attempt it took me a solid 4 hours just figuring out what everything meant, where to put the information and how to keep my clients emails from going to the spam folder... Hopefully we can save you some time and frustration with this tutorial.
+
+Below we'll show you how to set up DNS on Netlify with Google Workspace, including DKIM, SPF, DMARC, and MX records. These details often translate between other entities like GoDaddy, Namecheap, Cloudflare, etc. so you can use this as a guide for those as well, but do your research to make sure you're using the correct information for your specific provider.
+
+## What is DNS?
+
+DNS stands for `Domain Name System`. It's a system that translates domain names (like example.com) into IP addresses (like 192.0.2.1). When you type a domain name into your browser, your computer contacts a DNS server to find the corresponding IP address. This allows you to visit websites without having to remember their IP addresses. It also allows you to use domain names instead of IP addresses in your email address, which is much easier to remember.
+
+DNS records are the instructions that tell DNS servers how to handle your domain name. There are several types of DNS records, including:
+
+- `A records`: maps a domain name to an IP address. A Stands for Address.
+- `CNAME records`: maps a domain name to another domain name
+- `MX records`: maps a domain name to an email provider
+- `TXT records`: stores arbitrary text data
+- `SPF records`: specifies which IP addresses are allowed to send emails from your domain
+- `DKIM records`: allows an email provider to verify that an email was sent from your domain
+
+By adding these records to your domain, you can control how your domain name is used.
+
+> For example: you can use A records to point your domain name to a web server, CNAME records to point your domain name to another domain name, MX records to point your domain name to an email provider, and TXT records to store arbitrary text data.
+
+These are various ways to authenticate your domain name as legit to ensure that emails sent from your domain are not marked as spam.
+
+In this tutorial, we'll be setting up A, CNAME, MX, and TXT records for your domain.
+
+## Why Use Netlify for DNS?
+
+Netlify is a popular hosting service for static websites and it's free to use! Because of these advantages it's a great option for hosting your website. However, if you're using Netlify to host your website, you can also use it to manage your DNS records. This is a great way to keep all of your website-related services in one place.
+
+### Just to explain:
+
+Netlify offers a lot of great features, such as free SSL certificates, CDN, and DNS management.
+
+`SSL certificates` are used to encrypt data sent between your website and your visitors. This is the same technology that's used to secure online banking and shopping websites. It's important because it prevents hackers from intercepting sensitive information like passwords and credit card numbers.
+
+`CDN` stands for Content Delivery Network. It's a network of servers that are distributed around the world. When someone visits your website, the CDN will serve them the content from the server that's closest to them. This makes your website load faster for your visitors. It also reduces the load on your server, which can help you save money on hosting costs.
+
+`DNS` stands for Domain Name System. It's a system that helps computers find each other on the Internet. When you type a domain name into your browser, your computer contacts a DNS server to find the corresponding IP address.
+
+## Step1️⃣: Set Up a Domain on Netlify
+
+> ⚠️ If you already have a domain on Netlify, you can skip to [Step2️⃣](#step2%EF%B8%8F%E2%83%A3-set-up-dns-records-on-netlify).
+
+If you haven't already, you'll need to set up a domain on Netlify. This is a simple process that only takes a few minutes. We'll assume that you already have a website with a Contact Form tailored to Netlifys form handling. If not, you can find a tutorial on how to do that [here](https://www.netlify.com/blog/2017/07/20/how-to-integrate-netlifys-form-handling-in-a-react-app/).
+
+1. Log in to your Netlify account.
+2. Click on the "Sites" tab.
+3. Click the "Add New Site" dropdown button.
+   - Select "Import an existing project".
+   - Select your Git provider and follow the steps to connect your repository.
+4. Once your repository is connected, select your site from `Sites ->`
+   - click on "Site settings" for your site.
+5. Scroll down to the "Custom domains" section and click the "Add custom domain" button.
+6. Enter your domain name and click the "Verify" button.
+7. Follow the instructions to verify your domain ownership.
+
+Additional information can be found on the [Netlify Docs](https://docs.netlify.com/domains-https/custom-domains/configure-external-dns/).
+
+## Step2️⃣: Set Up DNS Records on Netlify
+
+Now that your domain is set up on Netlify, you can configure your DNS records. Here are the steps:
+
+1. Log in to your Netlify account.
+2. Click on the "Sites" tab.
+3. Click on the site you want to configure.
+4. Click on the "Domain settings" tab.
+5. Click on the "Options" dropdown and select "Go to DNS panel".
+6. Click on the "Add new record" button.
+
+This will bring up a form where you can enter your DNS records. Here are the records you'll need to add:
+
+### A Records
+
+If you want to use your domain name without a subdomain, you'll need to add an A record for it.
+| Name | TTL | Type | Value |
+| --- | --- | --- | --- |
+| @ | 3600 | A | [Your IP Address] |
+
+You can find our more about A records: [Wiki-A Record](https://en.wikipedia.org/wiki/A_record).
+
+### CNAME Records
+
+If you want to use a subdomain, you'll need to add a CNAME record for it.
+| Name | TTL | Type | Value |
+| --- | --- | --- | --- |
+| www | 3600 | CNAME | [Your Domain Name] |
+
+You can find out more: [Wiki-CNAME Record](https://en.wikipedia.org/wiki/CNAME_record).
+
+### MX Records
+
+If you want to use an email provider, you'll need to add MX records for it. MX records specify the email server(s) for a domain. If you're using Google Workspace (formerly known as G Suite) for email, you'll need to add the following MX records:
+
+> If you created your google workspace before 2023 you will need to use the following MX records:
+
+| Name | TTL  | Type | Value                   |
+| ---- | ---- | ---- | ----------------------- |
+| @    | 3600 | MX   | ASPMX.L.GOOGLE.COM      |
+| @    | 3600 | MX   | ALT1.ASPMX.L.GOOGLE.COM |
+| @    | 3600 | MX   | ALT2.ASPMX.L.GOOGLE.COM |
+| @    | 3600 | MX   | ALT3.ASPMX.L.GOOGLE.COM |
+| @    | 3600 | MX   | ALT4.ASPMX.L.GOOGLE.COM |
+
+> If you created your google workspace after 2023 you will need to use the following MX records:
+
+| Name | TTL  | Type | Value           |
+| ---- | ---- | ---- | --------------- |
+| @    | 3600 | MX   | SMTP.GOOGLE.COM |
+
+> ⚠️ `Note:` If your form requests a priority, 0 being the highest priority and 10 being the lowest. If you are unsure of what to use, use 1.
+> You can find more information about MX records on the [Google Workspace Help Center](https://support.google.com/a/answer/140034?hl=en).
+
+### TXT Records
+
+These come in two parts. The first is to verify your domain with google. The second is to verify your domain with Netlify.
+
+#### Domain Verification
+
+If you haven't already verified your domain with Google Workspace, you'll need to add a TXT record for domain verification. Replace [Verification Code] with the verification code provided by Google Workspace.
+
+| Name | TTL  | Type | Value                                        |
+| ---- | ---- | ---- | -------------------------------------------- |
+| @    | 3600 | TXT  | google-site-verification=[Verification Code] |
+
+#### DMARC Records
+
+DMARC (Domain-based Message Authentication, Reporting & Conformance) is a protocol for email authentication. It helps prevent email spoofing and phishing by providing a way for email recipients to check if an email message is authorized by the domain owner. Here's the DMARC record you'll need to add:
+
+| Name    | TTL  | Type | Value                                                                                |
+| ------- | ---- | ---- | ------------------------------------------------------------------------------------ |
+| \_dmarc | 3600 | TXT  | v=DMARC1; p=none; rua=mailto:[Your Email]; ruf=mailto:[Your Email]; sp=none; aspf=r; |
+
+Replace [Your Email] with the email address where you want to receive DMARC reports.
+
+#### SPF Record
+
+| Name | TTL  | Type | Value                                |
+| ---- | ---- | ---- | ------------------------------------ |
+| @    | 3600 | TXT  | v=spf1 include:\_spf.google.com ~all |
+
+> You can find more information about TXT records on the [Google Workspace Help Center](https://support.google.com/a/answer/140034?hl=en).
+
+## Step3️⃣: Verify DNS Records
+
+Once you've added all the DNS records, you'll need to verify that they're set up correctly. Here's how:
+
+1. Log in to your Google Workspace account.
+2. Go to the "Domains" page.
+3. Click on the "Advanced DNS settings" button for your domain.
+4. Check that the A record, CNAME record, and MX records are correct.
+5. Check that the TXT records for domain verification, DMARC, and SPF are correct.
+6. Wait for DNS propagation (this can take up to 48 hours).
+7. Click on the "Verify" button to verify your domain ownership.
+
+## Step4️⃣: Set Up Email Automation with Zapier
+
+> ✨ Optional Automation✨
+
+Now that your DNS records are set up, you can use Zapier to automate your email workflows. Here's how to set up email automation with Zapier:
+
+1. Sign up for a Zapier account if you haven't already.
+2. Create a new Zap.
+3. Choose "Google Workspace" as the trigger app and select the trigger you want (e.g., "New Email").
+4. Follow the steps to connect your Google Workspace account and set up any necessary permissions.
+5. Choose the action app (e.g., "Send Email") and follow the steps to connect your email service provider (in this case, Google Workspace) and set up any necessary permissions.
+6. Customize the email template and specify the recipient, subject, and body of the email.
+7. Test the Zap to make sure it's working correctly.
+8. Turn on the Zap to start automating your email workflows.
+
+With Zapier, you can automate tasks such as sending a welcome email to new subscribers, sending a confirmation email when a form is submitted, or sending a reminder email when a deadline is approaching. These are just a few examples of what you can do with Zapier. You can find more information about Zapier on their [website](https://zapier.com/).
+
+## 🎉Congratulations!🎉
+
+You've successfully set up your domain with Google Workspace and Netlify. Setting up DNS on Netlify and integrating with Google Workspace and Zapier can help streamline your website and email workflows. By properly configuring your DNS records, you can ensure that your website is secure and your emails are authenticated and delivered reliably. And with Zapier, you can automate your email workflows and save time and effort.
+
+## 📝Further Reading 📝
+
+If you are interested I have started a Introduction to Web Dev. You can find it [here](/posts/1-intro_to_html).
+
+## 📚Resources📚
+
+- [Zapier](https://zapier.com/)
+- [Netlify](https://www.netlify.com/)
+- [Google Workspace Help Center](https://support.google.com/a/answer/140034?hl=en)
+- [Google Workspace](https://workspace.google.com/)
+- [Google Domains](https://domains.google/)

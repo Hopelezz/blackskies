@@ -3,7 +3,7 @@ author: Mark
 pubDatetime: 2023-04-21T22:09:00Z
 title: "Async and Await: Simplifying Asynchronous JavaScript"
 postSlug: 5-asnyc_and_await_simplified
-featured: true
+featured: false
 draft: false
 tags:
   - JavaScript
@@ -12,8 +12,7 @@ tags:
   - Await
   - Promises
 ogImage: "/assets/images/async_and_await.jpg"
-description:
-    Get rid of the complexities of asynchronous programming in JavaScript with the power of async and await.
+description: Get rid of the complexities of asynchronous programming in JavaScript with the power of async and await.
 ---
 
 ## Async and Await: Simplifying Asynchronous JavaScript
@@ -42,12 +41,12 @@ Here's an example of using `async` and `await` to fetch data from an API:
 
 ```js
 async function getData() {
-  const response = await fetch('https://api.example.com/data');
+  const response = await fetch("https://api.example.com/data");
   const data = await response.json();
   return data;
 }
 
-getData().then((data) => console.log(data));
+getData().then(data => console.log(data));
 ```
 
 In this example, we define an `async` function called `getData` that uses the `await` keyword to wait for the response from the API and then wait for the response to be parsed as JSON. The `getData` function returns a promise that resolves to the data returned by the API. We then call the `getData` function and log the returned data to the console.
@@ -61,7 +60,7 @@ Here's an example of error handling with `async` and `await`:
 ```js
 async function getData() {
   try {
-    const response = await fetch('https://api.example.com/data');
+    const response = await fetch("https://api.example.com/data");
     const data = await response.json();
     return data;
   } catch (error) {
@@ -70,8 +69,9 @@ async function getData() {
   }
 }
 
-getData().then((data) => console.log(data));
+getData().then(data => console.log(data));
 ```
+
 In this example, we use a `try/catch` block to catch any errors that occur while fetching data from the API. If an error occurs, we log it to the console and return `null`.
 
 ## Conclusion
