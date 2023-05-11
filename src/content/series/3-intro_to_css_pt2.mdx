@@ -1,10 +1,10 @@
 ---
 author: Mark
-pubDatetime: 2023-04-24T18:18:00Z
+pubDatetime: 2023-05-24T20:18:00Z
 title: "An Introduction to CSS: Styling Your Web Pages [Part 2]"
 postSlug: 3-intro_to_css_pt2
-featured: false
-draft: true
+featured: true
+draft: false
 tags:
   - CSS
   - StyleSheet
@@ -15,6 +15,8 @@ tags:
 ogImage: ""
 description: "Lets talk Layouts! We will continue our introduction to CSS by looking at how to create responsive layouts to our web pages."
 ---
+
+import example from "../assets/images/intro to css/example.png";
 
 > If you missed our last post in the series you can find it here: [Intro to CSS [Part 1]](/posts/2-intro_to_css_pt1).
 
@@ -33,7 +35,18 @@ To start we should get familiarized with the box model. This is a way of describ
 - `Border`: the line that separates the `padding` from the `margin`.
 - `Margin`: the space between the `border` and the edge of the page.
 
+You can use CSS to manipulate the box model by setting properties for each of these parts individually. For example, to add padding to an element, you can use the padding property:
+
+```css
+.className {
+  padding: 10px;
+}
+```
+
+This will add 10 pixels of space around the content of the .example element.
+
 ```lua
+Example Box Model:
 +-----------------+
 |     margin      |
 |                 |
@@ -52,7 +65,7 @@ To start we should get familiarized with the box model. This is a way of describ
 +-----------------+
 ```
 
-> To see this in action you can right-click in your browser and select `Inspect Element`. This will open the developer tools and you can hover over any element on the page.
+> To see this in action You can go to the browser and right click on any page element and select `Inspect Element` or `Inspect`. You might have to click the `Select an element in the page to inspect it` or press `Ctrl + Shift + C. This will allow you to hover over any element on the page to see its box model.
 
 You can use CSS properties like `padding`, `border`, and `margin` to control the size and spacing of the different areas of an element, but more on this later.
 
@@ -60,12 +73,14 @@ You can use CSS properties like `padding`, `border`, and `margin` to control the
 
 One of the biggest parts of styling is figuring out how to scale content. Before we can do that we need to understand the unquie units of measure within CSS. Here are some of the most commonly used units:
 
-- `px`: Pixels (1px = 1/96th of 1in)
-- `em`: Relative to the `font size` of the `element`
-- `rem`: Relative to the `font size` of the `root element`
-- `vw`: Relative to 1% of the `width` of the `viewport`
-- `vh`: Relative to 1% of the `height` of the `viewport`
-- `%`: Relative to the `parent element`
+| Unit  | Description                                       |
+| ----- | ------------------------------------------------- |
+| `px`  | Pixels (1px = 1/96th of 1in)                      |
+| `em`  | Relative to the `font size` of the `element`      |
+| `rem` | Relative to the `font size` of the `root element` |
+| `vw`  | Relative to 1% of the `width` of the `viewport`   |
+| `vh`  | Relative to 1% of the `height` of the `viewport`  |
+| `%`   | Relative to the `parent element`                  |
 
 ## CSS Layouts
 
@@ -122,6 +137,150 @@ The `grid` layout is a two-dimensional layout method for laying out items in row
   grid-column: 1 / 3;
 }
 ```
+
+| Property                | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| `display`               | Defines the type of layout to use for the container.  |
+| `grid-template-columns` | Defines the number of columns in the grid.            |
+| `grid-template-rows`    | Defines the number of rows in the grid.               |
+| `grid-column`           | Defines the column that the item should be placed in. |
+| `grid-row`              | Defines the row that the item should be placed in.    |
+| `grid-area`             | Defines the area that the item should be placed in.   |
+| `grid-gap`              | Defines the size of the gap between grid items.       |
+
+## CSS Properties
+
+CSS provides a wide range of properties for styling and laying out content on a web page. Here are some of the most commonly used properties:
+
+| Property     | Description                                       |
+| ------------ | ------------------------------------------------- |
+| `background` | Sets the background color or image of an element. |
+| `border`     | Sets the border of an element.                    |
+| `color`      | Sets the text color of an element.                |
+| `display`    | Sets how an element is displayed.                 |
+| `font`       | Sets the font of an element.                      |
+| `height`     | Sets the height of an element.                    |
+| `margin`     | Sets the margin of an element.                    |
+| `padding`    | Sets the padding of an element.                   |
+| `width`      | Sets the width of an element.                     |
+
+## CSS Selectors
+
+CSS selectors are used to select elements on a web page. There are many different types of selectors, but here are some of the most commonly used:
+
+| Selector               | Description                                                               |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `element`              | Selects all elements of a given type.                                     |
+| `#id`                  | Selects an element with a given id.                                       |
+| `.class`               | Selects all elements with a given class.                                  |
+| `:hover`               | Selects an element when the mouse is over it.                             |
+| `:active`              | Selects an element when it is being clicked on.                           |
+| `:focus`               | Selects an element when it has focus.                                     |
+| `:first-child`         | Selects the first child of an element.                                    |
+| `:last-child`          | Selects the last child of an element.                                     |
+| `:nth-child(n)`        | Selects the nth child of an element.                                      |
+| `:nth-last-child(n)`   | Selects the nth child of an element, counting from the last child.        |
+| `:nth-of-type(n)`      | Selects the nth child of an element, counting from the first child.       |
+| `:nth-last-of-type(n)` | Selects the nth child of an element, counting from the last child.        |
+| `:first-of-type`       | Selects the first child of an element.                                    |
+| `:last-of-type`        | Selects the last child of an element.                                     |
+| `:only-child`          | Selects an element that is the only child of its parent.                  |
+| `:only-of-type`        | Selects an element that is the only child of its parent.                  |
+| `:empty`               | Selects an element that has no children.                                  |
+| `:not(selector)`       | Selects all elements that do not match the given selector.                |
+| `:root`                | Selects the root element of the document.                                 |
+| `::after`              | Inserts content after the selected element.                               |
+| `::before`             | Inserts content before the selected element.                              |
+| `::first-letter`       | Selects the first letter of the selected element.                         |
+| `::first-line`         | Selects the first line of the selected element.                           |
+| `::selection`          | Selects the portion of the selected element that is selected by the user. |
+| `::backdrop`           | Selects the backdrop element of the document.                             |
+| `::placeholder`        | Selects the placeholder text of an input element.                         |
+| `::marker`             | Selects the marker of a list item.                                        |
+| `::spelling-error`     | Selects the spelling error of an element.                                 |
+| `::grammar-error`      | Selects the grammar error of an element.                                  |
+
+## Applying CSS Example
+
+Lets take what we have learned about CSS and apply it to a simple HTML structure. We will start by creating a new file called `index.html` and adding the following code to it:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Don't forget this line! -->
+  </head>
+  <!--This is named container, because it contains the h1 and p tags-->
+  <body class="container">
+    <!-- Notice we have 2 h1 tags but they're styled differently -->
+    <h1 class="title">My Web Page</h1>
+    <!-- We want easy to understand class names, so we use something like PageHeader-->
+    <h1 class="pageHeader">Welcome to my styled Webpage</h1>
+    <p>This a very simple web page.</p>
+  </body>
+</html>
+```
+
+Next, we will create a new file called `styles.css` and add the following code to it:
+
+```css
+.title {
+  color: red; /* Set the text color to red */
+  font-size: 32px; /* Set the font size to 32px */
+  font-weight: bold; /* Set the font weight to bold */
+}
+
+.container {
+  display: flex; /* Make the container a flex container */
+  flex-direction: column; /* Make the container display items vertically */
+  justify-content: center; /* Center the items vertically */
+  align-items: center; /* Center the items horizontally */
+  width: 100%; /* Make the container fill the entire screen horizontally */
+  height: 100%; /* Make the container fill the entire screen vertically */
+  background-color: #eee; /* Add a background color */
+}
+
+.pageHeader {
+  font-size: 24px; /* Set the font size to 24px */
+  font-weight: bold; /* Set the font weight to bold */
+}
+
+p {
+  font-size: 16px; /* Set the font size to 16px */
+}
+```
+
+Now, if we open `index.html` in a web browser, we should see the following:
+
+Feel free to play with the code here and see how it affects the page!
+
+<p
+  class="codepen"
+  data-height="500"
+  data-default-tab="html,result"
+  data-slug-hash="BaqxmaE"
+  data-editable="true"
+  data-user="hopelezz"
+  style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;"
+>
+  <span>
+    See the Pen <a href="https://codepen.io/hopelezz/pen/BaqxmaE">Simple CSS</a>{" "}
+    by Mark Spratt (<a href="https://codepen.io/hopelezz">@hopelezz</a>) on{" "}
+    <a href="https://codepen.io">CodePen</a>.
+  </span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+### TODO:
+
+- [ ] Add a border to the container
+- [ ] Change the color of the title to blue
+- [ ] Change the font size of the title to 48px
+- [ ] Add a text shadow to the title
+- [ ] Change the background color of the container to purple
+- [ ] Try playing with Grid instead of Flexbox. What happens? (Don't forget to use the `grid-template-areas` property!)
 
 ## To Wrap Up
 
