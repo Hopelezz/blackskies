@@ -9,11 +9,10 @@ import LinkButton from "@components/LinkButton.astro";
 import slugify from "@utils/slugify";
 import type { CollectionEntry } from "astro:content";
 
-
 export interface Props {
   pageNum: number;
   totalPages: number;
-  posts: CollectionEntry<"blog">[];
+  posts: CollectionEntry<"blog">[] | CollectionEntry<"series">[];
 }
 
 const { pageNum, totalPages, posts } = Astro.props;
@@ -27,9 +26,11 @@ const next = pageNum < totalPages ? "" : "disabled";
   <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
     <ul>
       {
-        posts.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
-        ))
+        posts.map(
+          ({ data }: CollectionEntry<"blog"> | CollectionEntry<"series">) => (
+            <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
+          )
+        )
       }
     </ul>
   </Main>

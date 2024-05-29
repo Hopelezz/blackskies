@@ -4,7 +4,7 @@ import Posts from "@layouts/Posts.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPageNumbers from "@utils/getPageNumbers";
 
-import { getCollection } from "astro:content";
+import { CollectionEntry, getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
 
@@ -13,6 +13,12 @@ const sortedPosts = getSortedPosts(posts);
 const totalPages = getPageNumbers(sortedPosts.length);
 
 const paginatedPosts = sortedPosts.slice(0, SITE.postPerPage);
+
+const blogPosts = paginatedPosts.filter(post => post.collection === "blog");
 ---
 
-<Posts posts={paginatedPosts} pageNum={1} totalPages={totalPages.length} />
+<Posts
+  posts={blogPosts as CollectionEntry<"blog">[]}
+  pageNum={1}
+  totalPages={totalPages.length}
+/>

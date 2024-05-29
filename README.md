@@ -1,153 +1,144 @@
-# AstroPaper 📄
+<!-- PROJECT SHIELDS -->
 
-![AstroPaper](public/astropaper-og.jpg)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+[![Astro][astro-shield]][astro-url]
+[![Built with Astro](https://astro.badg.es/v1/built-with-astro.svg)](https://astro.build)
 
-AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro blog theme. This theme is designed and crafted based on [my personal blog](https://satnaing.dev/blog).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Hopelezz/HopelezzBlog">
+    <img src="https://user-images.githubusercontent.com/72772558/180280901-7d62a24c-0354-4da5-8526-0aef52a4c161.png" alt="Logo" width="80" height="80">
+  </a>
 
-This theme follows best practices and provides accessibility out of the box. Light and dark mode are supported by default. Moreover, additional color schemes can also be configured.
+<h3 align="center">&#60;BlackSkies &#47;&#62;</h3>
 
-This theme is self-documented \_ which means articles/posts in this theme can also be considered as documentations. Read [the blog posts](https://astro-paper.pages.dev/posts/) or check [the README Documentation Section](#-documentation) for more info.
+  <p align="center">
+    Welcome to BlackSkies.net, where we navigate the vast universe of tech and programming with curiosity and passion!
+    <br />
+    <a href="https://blackskies.net"><strong>Explore the Blog »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/Hopelezz/HopelezzBlog">View Demo</a>
+    ·
+    <a href="https://github.com/Hopelezz/HopelezzBlog/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/Hopelezz/HopelezzBlog/issues">Request Feature</a>
+  </p>
+</div>
 
-## 🔥 Features
+## Table of Contents
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
-- [x] SEO-friendly
-- [x] light & dark mode
-- [x] fuzzy search
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts [#15](https://github.com/satnaing/astro-paper/pull/15) ([Blog Post](https://astro-paper.pages.dev/posts/dynamic-og-image-generation-in-astropaper-blog-posts/))
+- [About The Project](#about-the-project)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [Contact]
+- [Acknowledgments](#acknowledgements)
 
-_Note: I've tested screen-reader accessibility of AstroPaper using **VoiceOver** on Mac and **TalkBack** on Android. I couldn't test all other screen-readers out there. However, accessibility enhancements in AstroPaper should be working fine on others as well._
+## About The Project
 
-## ✅ Lighthouse Score
+[BlackSkies] is your go-to place for all things tech and programming. Whether you're a seasoned developer or just dipping your toes into the digital universe, we've got something for you. From coding tips to tech reviews, we're here to make your journey through the black skies of technology a little brighter.
 
-<p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
-  <a>
-</p>
+### Built With
 
-## 🚀 Project Structure
+- [Astro](https://astro.build)
+- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
+- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-Inside of AstroPaper, you'll see the following folders and files:
+## Getting Started
 
-```bash
-/
-├── public/
-│   ├── assets/
-│   │   └── logo.svg
-│   │   └── logo.png
-│   └── favicon.svg
-│   └── astropaper-og.jpg
-│   └── robots.txt
-│   └── toggle-theme.js
-├── src/
-│   ├── assets/
-│   │   └── socialIcons.ts
-│   ├── components/
-│   ├── content/
-│   │   |  blog/
-│   │   |    └── some-blog-posts.md
-│   │   └── _schemas.ts
-│   │   └── config.ts
-│   ├── layouts/
-│   └── pages/
-│   └── styles/
-│   └── utils/
-│   └── config.ts
-│   └── types.ts
-└── package.json
-```
+To get a local copy up and running follow these simple steps.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Prerequisites
 
-Any static assets, like images, can be placed in the `public/` directory.
+- npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-All blog posts are stored in `src/content/blog` directory.
+### Installation
 
-## 📖 Documentation
+1. Clone the repo
+   ```sh
+   git clone https://github.com/Hopelezz/blackskies.git
+   ```
+2. Install NPM packages
+   ```sh
+    npm install
+   ```
+3. Start the development server
+   ```sh
+     npm run astro dev
+   ```
 
-Documentation can be read in two formats\_ _markdown_ & _blog post_.
+## Usage
 
-- Configuration - [markdown](src/content/blog/how-to-configure-astropaper-theme.md) | [blog post](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- Add Posts - [markdown](src/content/blog/adding-new-post.md) | [blog post](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- Customize Color Schemes - [markdown](src/content/blog/customizing-astropaper-theme-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- Predefined Color Schemes - [markdown](src/content/blog/predefined-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
+The blog posts and content are written in markdown and can be found in the `src/posts` directory. To add a new post, simply create a new markdown file in the `src/posts` directory and follow the existing markdown files as a template.
 
-> For AstroPaper v1, check out [this branch](https://github.com/satnaing/astro-paper/tree/astro-paper-v1) and this [live URL](https://astro-paper-v1.astro-paper.pages.dev/)
+## Roadmap
 
-## 💻 Tech Stack
+### Features
 
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Component Framework** - [ReactJS](https://reactjs.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
-**UI/UX** - [Figma](https://figma.com)  
-**Fuzzy Search** - [FuseJS](https://fusejs.io/)  
-**Icons** - [Boxicons](https://boxicons.com/) | [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Illustration in About Page** - [https://freesvgillustration.com](https://freesvgillustration.com/)  
-**Linting** - [ESLint](https://eslint.org)
+- [ ] Add an `About Me` page
+- [ ] Add a `404` page
+- [x] Add a Search Feature to query the posts for keywords
+- [ ] Make the Page More Accessible
+- [x] Rebuild the default component system.
 
-## 👨🏻‍💻 Running Locally
+### Style
 
-The easiest way to run this project locally is to run the following command in your desired directory.
+- [x] Add a Dark Theme.
+- [ ] Make the Page More responsive to Mobile.
+- [ ] Add a RightSideBar that shows the `Post headers`.
 
-```bash
-# npm 6.x
-npm create astro@latest --template satnaing/astro-paper
+### End Goal
 
-# npm 7+, extra double-dash is needed:
-npm create astro@latest -- --template satnaing/astro-paper
+- [ ] Create a template for the Astro Framework based on what I've learned here
 
-# yarn
-yarn create astro --template satnaing/astro-paper
-```
+See the [open issues](https://github.com/Hopelezz/HopelezzBlog/issues) for a full list of proposed features (and known issues).
 
-## Google Site Verification (optional)
+## Contributing
 
-You can easily add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) in AstroPaper using environment variable. This step is optional. If you don't add the following env variable, the google-site-verification tag won't appear in the html `<head>` section.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-```bash
-# in your environment variable file (.env)
-PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-site-verification-value
-```
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 🧞 Commands
+## Contact
 
-All commands are run from the root of the project, from a terminal:
+Mark Spratt - [@\_hopelezz](https://x.com/_hopelezz)
 
-| Command                | Action                                                                                                                           |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `npm install`          | Installs dependencies                                                                                                            |
-| `npm run dev`          | Starts local dev server at `localhost:3000`                                                                                      |
-| `npm run build`        | Build your production site to `./dist/`                                                                                          |
-| `npm run preview`      | Preview your build locally, before deploying                                                                                     |
-| `npm run format:check` | Check code format with Prettier                                                                                                  |
-| `npm run format`       | Format codes with Prettier                                                                                                       |
-| `npm run sync`         | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `npm run cz`           | Commit code changes with commitizen                                                                                              |
-| `npm run lint`         | Lint with ESLint                                                                                                                 |
+Project Link: [BlackSkies](https://blackskies.netlify.app/)
 
-## ✨ Feedback & Suggestions
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-If you have any suggestions/feedback, you can contact me via [my email](mailto:contact@satnaing.dev). Alternatively, feel free to open an issue if you find bugs or want to request new features.
+<!-- MARKDOWN LINKS & IMAGES -->
 
-## 📜 License
-
-Licensed under the MIT License, Copyright © 2023
-
----
-
-Made with 🤍 by [Sat Naing](https://satnaing.dev) 👨🏻‍💻
+[contributors-shield]: https://img.shields.io/github/contributors/Hopelezz/HopelezzBlog.svg?style=for-the-badge
+[contributors-url]: https://github.com/Hopelezz/HopelezzBlog/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Hopelezz/HopelezzBlog.svg?style=for-the-badge
+[forks-url]: https://github.com/Hopelezz/HopelezzBlog/network/members
+[stars-shield]: https://img.shields.io/github/stars/Hopelezz/HopelezzBlog.svg?style=for-the-badge
+[stars-url]: https://github.com/Hopelezz/HopelezzBlog/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Hopelezz/HopelezzBlog.svg?style=for-the-badge
+[issues-url]: https://github.com/Hopelezz/HopelezzBlog/issues
+[license-shield]: https://img.shields.io/github/license/Hopelezz/HopelezzBlog.svg?style=for-the-badge
+[license-url]: https://github.com/Hopelezz/HopelezzBlog/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/linkedin_username
+[astro-shield]: https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=fff&style=for-the-badge
+[astro-url]: https://astro.build/
+[product-screenshot]: images/screenshot.png

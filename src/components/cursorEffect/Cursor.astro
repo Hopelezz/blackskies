@@ -1,128 +1,147 @@
 ---
-
 ---
+
 <canvas id="canvas"></canvas>
 
 <style>
-    #canvas {
-        position: fixed;
-        left:0;
-        top:0;
-        pointer-events: none;
-        z-index: -100;
-    }
+  #canvas {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: -100;
+  }
 </style>
 
 <script>
-    const canvas = document.getElementById('canvas');
-    canvas.width = window.innerWidth;   // set canvas width to window width
-    canvas.height = window.innerHeight; // set canvas height to window height
-    const ctx = canvas.getContext('2d');    // 2d context
-    let spots = []; // creates an array of spots
-    let hue = 274;    // Sets the color of the particles
+  document.addEventListener("DOMContentLoaded", () => {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const ctx = canvas?.getContext("2d");
+    let spots: Particle[] = [];
+    // let hue = 274;
+    const mouse: { x: number | undefined; y: number | undefined } = {
+      x: undefined,
+      y: undefined,
+    };
 
-    const mouse = {
-        x: undefined,   // mouse position
-        y: undefined    // mouse position
+    function setCanvasSize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
 
-    window.addEventListener('mousemove', function(event: MouseEvent) { // listens for mouse movement
-        mouse.x = event.x;  //event.x is the x coordinate of the mouse
-        mouse.y = event.y; //event.y is the y coordinate of the mouse
-        for (let i = 0; i < 3; i++) { // 3 is the number of particles
-            spots.push(new Particle()); // add a new particle
-        }
+    setCanvasSize();
+    window.addEventListener("resize", setCanvasSize);
+
+    function updateMousePosition(event: MouseEvent | TouchEvent) {
+      if ("touches" in event) {
+        // This is a TouchEvent
+        mouse.x = event.touches[0].clientX;
+        mouse.y = event.touches[0].clientY;
+      } else {
+        // This is a MouseEvent
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      }
+    }
+
+    function addParticles(count: number) {
+      for (let i = 0; i < count; i++) {
+        spots.push(new Particle());
+      }
+    }
+
+    window.addEventListener("mousemove", event => {
+      updateMousePosition(event);
+      addParticles(1); // Adjust the number of particles added on mouse movement
     });
 
-    // on touchstart event start drawing particles
-    window.addEventListener('touchstart', function(event) { // listens for touch movement
-        mouse.x = event.touches[0].clientX; // get touch x coordinate
-        mouse.y = event.touches[0].clientY; // get touch y coordinate
-        for (let i = 0; i < 10; i++) { // 3 is the number of particles
-            spots.push(new Particle()); // add a new particle
-        }
+    window.addEventListener("touchstart", event => {
+      updateMousePosition(event);
+      addParticles(5); // Adjust the number of particles added on touch start
     });
 
-    window.addEventListener('touchmove', function(event) { 
-        // based on touchmove event start drawing particles increase the number of particles
-        mouse.x = event.touches[0].clientX; // get touch x coordinate
-        mouse.y = event.touches[0].clientY; // get touch y coordinate
-        for (let i = 0; i < 15; i++) { // 3 is the number of particles
-            spots.push(new Particle()); // add a new particle
-        }
+    window.addEventListener("touchmove", event => {
+      updateMousePosition(event);
+      addParticles(7); // Adjust the number of particles added on touch move events
+    });
+
+    window.addEventListener("mouseout", () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
+    });
+
+    window.addEventListener("touchend", () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
     });
 
     class Particle {
-        constructor() {
-            this.x = mouse.x;
-            this.y = mouse.y;
-            this.size = Math.random() * 2 + 0.1;
-            this.speedX = Math.random() * 2 - 1;
-            this.speedY = Math.random() * 2 - 1;
-            this.color = `hsl(153.469, 48.7%, 46.8%)`;
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      color: string;
+
+      constructor() {
+        this.x = mouse.x ?? 0;
+        this.y = mouse.y ?? 0;
+        this.size = Math.random() * 2 + 0.1;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.color = "hsl(153.469, 48.7%, 46.8%)";
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.1) this.size -= 0.03;
+      }
+      draw() {
+        if (ctx) {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
         }
-        update(){
-            this.x += this.speedX;  //update speedX
-            this.y += this.speedY;  //update speedY
-            if (this.size > 0.1) this.size -= 0.03; //update size
-        }
-        draw(){
-            ctx.fillStyle = this.color; // color of the particle
-            ctx.beginPath(); // start a new path
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); // x, y, radius, startAngle, endAngle
-            ctx.fill(); // fill the circle
-        }
+      }
     }
 
-    function handleParticle(){
-        for (let i = 0; i < spots.length; i++) {
-            spots[i].update();  // update position
-            spots[i].draw();    // draw the particle
-            for (let j = i; j< spots.length; j++) { // check for collisions
-                const dx = spots[i].x - spots[j].x; // x distance
-                const dy = spots[i].y - spots[j].y; // distance between two particles
-                const distance = Math.sqrt(dx * dx + dy * dy);  // distance between two points
-                
-                if (distance < 90){ // if distance is less than 90
-                    ctx.beginPath(); // start a new path
-                    ctx.strokeStyle = spots[i].color; // color of the lines
-                    ctx.lineWidth = spots[i].size / 10; // width of the line
-                    ctx.moveTo(spots[i].x, spots[i].y); // start point
-                    ctx.lineTo(spots[j].x, spots[j].y); // end point
-                    ctx.stroke(); // draw the line
-                }
+    function handleParticles() {
+      for (let i = 0; i < spots.length; i++) {
+        spots[i].update();
+        spots[i].draw();
+
+        for (let j = i + 1; j < spots.length; j++) {
+          const dx = spots[i].x - spots[j].x;
+          const dy = spots[i].y - spots[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 90) {
+            if (ctx) {
+              ctx.beginPath();
+              ctx.strokeStyle = spots[i].color;
+              ctx.lineWidth = spots[i].size / 10;
+              ctx.moveTo(spots[i].x, spots[i].y);
+              ctx.lineTo(spots[j].x, spots[j].y);
+              ctx.stroke();
             }
-            if (spots[i].size <= 0.3){
-                spots.splice(i, 1); i--;    // remove the particle
-            }
+          }
         }
+        if (spots[i].size <= 0.3) {
+          spots.splice(i, 1);
+          i--;
+        }
+      }
     }
 
-    function animate(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
-        handleParticle();
-        //change hue between #7E52A0 and #FFF8E1
-        // hue += 0.1;
-        // if (hue >= 360) hue = 0;
-        requestAnimationFrame(animate); // call animate again
+    function animate() {
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      handleParticles();
+      requestAnimationFrame(animate);
     }
 
-    window.addEventListener("resize", function(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
-    window.addEventListener('mouseout', function(){
-        mouse.x = undefined;
-        mouse.y = undefined;
-        Infinity/0;
-    });
-
-    window.addEventListener('touchend', function(){
-        mouse.x = undefined;
-        mouse.y = undefined;
-        Infinity/0;
-    });
-    
     animate();
+  });
 </script>
