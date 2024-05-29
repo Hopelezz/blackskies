@@ -17,7 +17,9 @@ const series = await getCollection("series");
 const posts = [...blogs, ...series];
 
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const featuredPosts = sortedPosts.filter(
+  ({ data }) => (data as { featured: boolean }).featured
+);
 
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
@@ -44,10 +46,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       </a>
 
       <p>
-        A Tech Blog by Mark Spratt. I write about web development, programming, and other tech related topics.
+        A Tech Blog by Mark Spratt. I write about web development, programming,
+        and other tech related topics.
       </p>
       <p>
-        If you want to find out more about me, check out my <a href="/about">about page</a>. Or check out one of my socials below.
+        If you want to find out more about me, check out my <a href="/about"
+          >about page</a
+        >. Or check out one of my socials below.
       </p>
       {
         // only display if at least one social link is enabled

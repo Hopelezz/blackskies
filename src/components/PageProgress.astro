@@ -1,29 +1,39 @@
 ---
-
 ---
+
 <div class="progress"></div>
 
 <style>
-.progress {
-    background: linear-gradient(to right, #42AD8B var(--scroll), transparent 0);
+  .progress {
+    background: linear-gradient(to right, #42ad8b var(--scroll), transparent 0);
     background-repeat: no-repeat;
     position: fixed;
     width: 100%;
     height: 10px;
     z-index: 1;
-}
+  }
 </style>
 
 <script>
-    var h = document.documentElement,
+  var h = document.documentElement,
     b = document.body,
-    st = 'scrollTop',
-    sh = 'scrollHeight',
-    progress = document.querySelector('.progress'),
+    st = "scrollTop",
+    sh = "scrollHeight",
+    progress = document.querySelector(".progress"),
     scroll;
 
-    document.addEventListener('scroll', function() {
-        scroll = (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
-        progress.style.setProperty('--scroll', scroll + '%');
-    });
+  document.addEventListener("scroll", function () {
+    const hAny = h as any;
+    const bAny = b as any;
+
+    const scrollTop = hAny[st] || bAny[st];
+    const scrollHeight = hAny[sh] || bAny[sh];
+    const clientHeight = h.clientHeight;
+
+    scroll = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+    if (progress) {
+      (progress as HTMLElement).style.setProperty("--scroll", scroll + "%");
+    }
+  });
 </script>
