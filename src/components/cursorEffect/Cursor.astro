@@ -1,79 +1,69 @@
 ---
 ---
 
-<canvas id="canvas"></canvas>
+<canvas id="particleCanvas"></canvas>
 
 <style>
-  #canvas {
+  #particleCanvas {
     position: fixed;
     left: 0;
     top: 0;
-    pointer-events: none;
-    z-index: -100;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Allows interactions to pass through to content below */
+    z-index: 1000; /* Place above content to show particles */
   }
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const canvas = document.getElementById(
+      "particleCanvas"
+    ) as HTMLCanvasElement;
     const ctx = canvas?.getContext("2d");
     let spots: Particle[] = [];
-    // let hue = 274;
-    const mouse: { x: number | undefined; y: number | undefined } = {
-      x: undefined,
-      y: undefined,
+
+    // Mobile-optimized config
+    const config = {
+      particleColor: "hsl(153.469, 48.7%, 46.8%)",
+      particleSize: {
+        min: window.innerWidth < 768 ? 0.5 : 0.1,
+        max: window.innerWidth < 768 ? 3.0 : 2.1,
+      },
+      particleSpeed: {
+        min: -0.7,
+        max: 0.7,
+      },
+      particleShrinkRate: 0.02,
+      particleMinSize: 0.3,
+      connectionDistance: window.innerWidth < 768 ? 70 : 90,
+      particlesPerTouch: 1,
+      maxParticles: 150,
+    };
+
+    const mouse = {
+      x: undefined as number | undefined,
+      y: undefined as number | undefined,
     };
 
     function setCanvasSize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
 
-    setCanvasSize();
-    window.addEventListener("resize", setCanvasSize);
-
-    function updateMousePosition(event: MouseEvent | TouchEvent) {
-      if ("touches" in event) {
-        // This is a TouchEvent
-        mouse.x = event.touches[0].clientX;
-        mouse.y = event.touches[0].clientY;
-      } else {
-        // This is a MouseEvent
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
+      if (ctx) {
+        ctx.scale(dpr, dpr);
       }
     }
 
-    function addParticles(count: number) {
-      for (let i = 0; i < count; i++) {
-        spots.push(new Particle());
-      }
+    function updateMousePosition(event: TouchEvent | MouseEvent) {
+      const touch = "touches" in event ? event.touches[0] : event;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = touch.clientX - rect.left;
+      mouse.y = touch.clientY - rect.top;
     }
-
-    window.addEventListener("mousemove", event => {
-      updateMousePosition(event);
-      addParticles(1); // Adjust the number of particles added on mouse movement
-    });
-
-    window.addEventListener("touchstart", event => {
-      updateMousePosition(event);
-      addParticles(5); // Adjust the number of particles added on touch start
-    });
-
-    window.addEventListener("touchmove", event => {
-      updateMousePosition(event);
-      addParticles(7); // Adjust the number of particles added on touch move events
-    });
-
-    window.addEventListener("mouseout", () => {
-      mouse.x = undefined;
-      mouse.y = undefined;
-    });
-
-    window.addEventListener("touchend", () => {
-      mouse.x = undefined;
-      mouse.y = undefined;
-    });
 
     class Particle {
       x: number;
@@ -86,23 +76,45 @@
       constructor() {
         this.x = mouse.x ?? 0;
         this.y = mouse.y ?? 0;
-        this.size = Math.random() * 2 + 0.1;
-        this.speedX = Math.random() * 2 - 1;
-        this.speedY = Math.random() * 2 - 1;
-        this.color = "hsl(153.469, 48.7%, 46.8%)";
+        this.size =
+          Math.random() * (config.particleSize.max - config.particleSize.min) +
+          config.particleSize.min;
+        this.speedX =
+          Math.random() *
+            (config.particleSpeed.max - config.particleSpeed.min) +
+          config.particleSpeed.min;
+        this.speedY =
+          Math.random() *
+            (config.particleSpeed.max - config.particleSpeed.min) +
+          config.particleSpeed.min;
+        this.color = config.particleColor;
       }
+
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.size > 0.1) this.size -= 0.03;
-      }
-      draw() {
-        if (ctx) {
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fill();
+        if (this.size > config.particleMinSize) {
+          this.size -= config.particleShrinkRate;
         }
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function addParticles(count: number) {
+      if (spots.length >= config.maxParticles) {
+        spots = spots.slice(-config.maxParticles);
+        return;
+      }
+
+      for (let i = 0; i < count; i++) {
+        spots.push(new Particle());
       }
     }
 
@@ -111,23 +123,23 @@
         spots[i].update();
         spots[i].draw();
 
+        // Connect nearby particles
         for (let j = i + 1; j < spots.length; j++) {
           const dx = spots[i].x - spots[j].x;
           const dy = spots[i].y - spots[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 90) {
-            if (ctx) {
-              ctx.beginPath();
-              ctx.strokeStyle = spots[i].color;
-              ctx.lineWidth = spots[i].size / 10;
-              ctx.moveTo(spots[i].x, spots[i].y);
-              ctx.lineTo(spots[j].x, spots[j].y);
-              ctx.stroke();
-            }
+          if (distance < config.connectionDistance && ctx) {
+            ctx.beginPath();
+            ctx.strokeStyle = spots[i].color;
+            ctx.lineWidth = spots[i].size / 10;
+            ctx.moveTo(spots[i].x, spots[i].y);
+            ctx.lineTo(spots[j].x, spots[j].y);
+            ctx.stroke();
           }
         }
-        if (spots[i].size <= 0.3) {
+
+        if (spots[i].size <= config.particleMinSize) {
           spots.splice(i, 1);
           i--;
         }
@@ -135,12 +147,45 @@
     }
 
     function animate() {
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+      if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       handleParticles();
       requestAnimationFrame(animate);
     }
+
+    // Event Listeners
+    setCanvasSize();
+    window.addEventListener("resize", setCanvasSize);
+
+    // Handle both touch and mouse events
+    document.addEventListener(
+      "touchstart",
+      event => {
+        updateMousePosition(event);
+        addParticles(config.particlesPerTouch);
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      "touchmove",
+      event => {
+        updateMousePosition(event);
+        addParticles(config.particlesPerTouch);
+      },
+      { passive: true }
+    );
+
+    document.addEventListener("touchend", () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
+    });
+
+    // Mouse events for non-touch devices
+    document.addEventListener("mousemove", event => {
+      updateMousePosition(event);
+      addParticles(config.particlesPerTouch);
+    });
 
     animate();
   });
