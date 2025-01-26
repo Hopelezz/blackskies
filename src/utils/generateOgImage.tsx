@@ -1,4 +1,6 @@
-import satori, { SatoriOptions } from "satori";
+import React from "react";
+import satori from "satori";
+import type { SatoriOptions } from "satori";
 import { SITE } from "@config";
 import { writeFile } from "node:fs/promises";
 import { Resvg } from "@resvg/resvg-js";
