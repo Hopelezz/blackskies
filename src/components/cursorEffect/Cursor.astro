@@ -10,8 +10,8 @@
     top: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none; /* Allows interactions to pass through to content below */
-    z-index: 1000; /* Place above content to show particles */
+    pointer-events: none;
+    z-index: 1000;
   }
 </style>
 
@@ -22,8 +22,8 @@
     ) as HTMLCanvasElement;
     const ctx = canvas?.getContext("2d");
     let spots: Particle[] = [];
+    let isScrolling = false;
 
-    // Mobile-optimized config
     const config = {
       particleColor: "hsl(153.469, 48.7%, 46.8%)",
       particleSize: {
@@ -63,6 +63,7 @@
       const rect = canvas.getBoundingClientRect();
       mouse.x = touch.clientX - rect.left;
       mouse.y = touch.clientY - rect.top;
+      addParticles(config.particlesPerTouch);
     }
 
     class Particle {
@@ -123,7 +124,6 @@
         spots[i].update();
         spots[i].draw();
 
-        // Connect nearby particles
         for (let j = i + 1; j < spots.length; j++) {
           const dx = spots[i].x - spots[j].x;
           const dy = spots[i].y - spots[j].y;
@@ -157,34 +157,21 @@
     setCanvasSize();
     window.addEventListener("resize", setCanvasSize);
 
-    // Handle both touch and mouse events
-    document.addEventListener(
-      "touchstart",
-      event => {
-        updateMousePosition(event);
-        addParticles(config.particlesPerTouch);
-      },
-      { passive: true }
-    );
+    // Mouse events
+    document.addEventListener("mousemove", updateMousePosition);
+    document.addEventListener("mousedown", updateMousePosition);
+    document.addEventListener("mousemove", updateMousePosition);
 
-    document.addEventListener(
-      "touchmove",
-      event => {
-        updateMousePosition(event);
-        addParticles(config.particlesPerTouch);
-      },
-      { passive: true }
-    );
-
+    // Touch events
+    document.addEventListener("touchstart", updateMousePosition, {
+      passive: true,
+    });
+    document.addEventListener("touchmove", updateMousePosition, {
+      passive: true,
+    });
     document.addEventListener("touchend", () => {
       mouse.x = undefined;
       mouse.y = undefined;
-    });
-
-    // Mouse events for non-touch devices
-    document.addEventListener("mousemove", event => {
-      updateMousePosition(event);
-      addParticles(config.particlesPerTouch);
     });
 
     animate();
