@@ -1,6 +1,7 @@
 export type Site = {
   website: string;
   author: string;
+  devsite: string;
   desc: string;
   title: string;
   ogImage: string;
@@ -40,4 +41,4 @@ export type SocialMedia =
   | "Steam"
   | "Telegram"
   | "Mastodon"
-  | "BlueSky";
+  | "Developer Website";
