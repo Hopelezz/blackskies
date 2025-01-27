@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
+import Sharebutton from "@components/sharebutton.astro";
 import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
 import PageProgress from "@components/PageProgress.astro";
@@ -38,7 +39,10 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   </div>
   <main id="main-content">
     <h1 class="post-title">{title}</h1>
-    <Datetime datetime={pubDatetime} size="lg" className="my-2" />
+    <div class="flex items-center space-x-4">
+      <Datetime datetime={pubDatetime} size="lg" className="my-2" />
+      <Sharebutton />
+    </div>
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>
