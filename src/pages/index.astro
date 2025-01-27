@@ -45,15 +45,24 @@ const socialCount = SOCIALS.filter(social => social.active).length;
         </svg>
       </a>
 
-      <p>
-        A Tech Blog by Mark Spratt. I write about web development, programming,
-        and other tech related topics.
-      </p>
-      <p>
-        If you want to find out more about me, check out my <a href="/about"
-          >about page</a
-        >. Or check out one of my socials below.
-      </p>
+      <div class="intro-content">
+        <p class="main-description">
+          <span class="highlight">Hey there! 👋</span> I'm Mark Spratt, a passionate
+          developer sharing insights about <span class="tech-keyword"
+            >web development</span
+          >,
+          <span class="tech-keyword">programming</span>, and emerging tech
+          trends.
+        </p>
+
+        <p class="connect-invitation">
+          Want to know the person behind the code? Check out my
+          <a href="/about" class="special-link">about page</a>
+          or connect with me through my social channels below. Let's build something
+          amazing together!
+          <span class="emoji">🚀</span>
+        </p>
+      </div>
       {
         // only display if at least one social link is enabled
         socialCount > 0 && (
@@ -122,7 +131,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 <style>
   /* ===== Hero Section ===== */
   #hero {
-    @apply pt-8 pb-6;
+    @apply pb-6 pt-8;
   }
   #hero h1 {
     @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
@@ -136,17 +145,49 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   #hero p {
     @apply my-2;
   }
+
+  .main-description {
+    @apply text-lg leading-relaxed;
+  }
+
+  .highlight {
+    @apply font-semibold text-skin-accent;
+  }
+
+  .tech-keyword {
+    @apply border-b-2 border-skin-accent 
+    border-opacity-30 font-medium text-skin-accent 
+    transition-all duration-300 
+    hover:border-opacity-100;
+  }
+
+  .connect-invitation {
+    @apply text-lg opacity-90;
+  }
+
+  .special-link {
+    @apply relative font-medium 
+    text-skin-accent after:absolute after:bottom-0 after:left-0 
+    after:h-0.5 after:w-full after:origin-right 
+    after:scale-x-0 after:transform after:bg-skin-accent
+    after:transition-transform after:duration-300
+    hover:after:origin-left hover:after:scale-x-100;
+  }
+
+  .emoji {
+    @apply inline-block transition-transform duration-300 hover:scale-110;
+  }
   .social-wrapper {
     @apply mt-4 flex flex-col sm:flex-row sm:items-center;
   }
   .social-links {
-    @apply mr-2 mb-1 whitespace-nowrap sm:mb-0;
+    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
   }
 
   /* ===== Featured & Recent Posts Sections ===== */
   #featured,
   #recent-posts {
-    @apply pt-12 pb-6;
+    @apply pb-6 pt-12;
   }
   #featured h2,
   #recent-posts h2 {
