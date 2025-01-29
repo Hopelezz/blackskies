@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 # ignore Jampack cache files
 .jampack/
+
+# ignore VSCode settings
+.vscode/
+.husky/
