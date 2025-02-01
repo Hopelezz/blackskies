@@ -1,10 +1,7 @@
 ---
-import { LOGO_IMAGE, SITE } from "@config";
+import { SITE } from "@config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
-
-import logoPNG from "/assets/logo.png";
-import logoSVG from "/assets/logo.svg";
 
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search";
@@ -17,20 +14,7 @@ const { activeNav } = Astro.props;
   <a id="skip-to-content" href="#main-content">Skip to content</a>
   <div class="nav-container">
     <div class="top-nav-wrap">
-      <a href="/" class="logo">
-        {
-          LOGO_IMAGE.enable ? (
-            <img
-              src={LOGO_IMAGE.svg ? logoSVG : logoPNG}
-              alt="AstroPaper Logo"
-              width={LOGO_IMAGE.width}
-              height={LOGO_IMAGE.height}
-            />
-          ) : (
-            SITE.title
-          )
-        }
-      </a>
+      <a href="/" class="logo">{SITE.title}</a>
       <nav id="nav-menu">
         <button
           class="hamburger-menu focus-outline"
@@ -181,13 +165,21 @@ const { activeNav } = Astro.props;
     @apply transition-opacity duration-75 ease-in-out;
   }
   .menu-icon .close {
-    opacity: 0;
+    @apply opacity-0 transition-opacity duration-75 ease-in-out;
   }
   .menu-icon.is-active .line {
     @apply opacity-0;
   }
   .menu-icon.is-active .close {
     @apply opacity-100;
+  }
+
+  /* Add these new styles for menu visibility */
+  #menu-items {
+    @apply hidden sm:flex;
+  }
+  #menu-items.show {
+    @apply block;
   }
 </style>
 
@@ -205,7 +197,58 @@ const { activeNav } = Astro.props;
       "aria-label",
       menuExpanded ? "Open Menu" : "Close Menu"
     );
-    menuItems?.classList.toggle("display-none");
+    menuItems?.classList.toggle("show");
   });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", event => {
+    const isClickInsideMenu = menuItems?.contains(event.target as Node);
+    const isClickOnMenuBtn = menuBtn?.contains(event.target as Node);
+
+    if (
+      !isClickInsideMenu &&
+      !isClickOnMenuBtn &&
+      menuItems?.classList.contains("show")
+    ) {
+      menuItems.classList.remove("show");
+      menuIcon?.classList.remove("is-active");
+      menuBtn?.setAttribute("aria-expanded", "false");
+      menuBtn?.setAttribute("aria-label", "Open Menu");
+    }
+  });
+
+  // Theme toggle
+  const themeBtn = document.querySelector("#theme-btn");
+  const htmlElement = document.documentElement;
+
+  // Function to get the current theme
+  const getTheme = () => {
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme) {
+      return storedTheme;
+    }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  // Function to set the theme
+  const setTheme = (theme: string) => {
+    htmlElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    themeBtn?.setAttribute(
+      "aria-label",
+      theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+    );
+  };
+
+  // Event listener for the theme toggle button
+  themeBtn?.addEventListener("click", () => {
+    const currentTheme = getTheme();
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+  });
+
+  // Initialize the theme on page load
+  setTheme(getTheme());
 </script>
-<script src="/toggle-theme.js" defer></script>
