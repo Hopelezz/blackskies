@@ -83,9 +83,8 @@ If you love performance optimizations, frameworks like Astro will likely become 
 - **Partial Hydration**: Astro’s hydration concept means it makes components iteractive using client directives. This delivers static HTML wherever possible, only hydrating the parts of your page that need interactivity. This results in faster load times, better Lighthouse scores, and a more pleasant user experience. [Documentation: Hydration](https://docs.astro.build/en/guides/framework-components/#hydrating-interactive-components)
 
 ```astro
-// Example: Astro component with partial hydration
-
-// file: MyInteractiveComponent.astro import MyButton from
+// Example: Astro component with partial hydration // file:
+MyInteractiveComponent.astro import MyButton from
 '../components/MyButton.astro';
 
 <!-- Only hydrate this component if it’s visible on the screen -->

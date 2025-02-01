@@ -10,7 +10,7 @@ const seriesCollection = defineCollection({
   schema: blogSchema, // change this to seriesSchema when it's ready
 });
 
-export const collections = { 
-  'blog': blogCollection,
-  'series': seriesCollection,
- };
+export const collections = {
+  blog: blogCollection,
+  series: seriesCollection,
+};
