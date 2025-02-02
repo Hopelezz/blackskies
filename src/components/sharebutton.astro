@@ -131,12 +131,10 @@ const shareUrls = {
 <script>
   class ShareButton {
     private button: HTMLElement;
-    private tray: HTMLElement | null;
     private isOpen: boolean;
 
     constructor(button: HTMLElement) {
       this.button = button;
-      this.tray = button.querySelector(".tray");
       this.isOpen = false;
 
       this.button.addEventListener("click", () => this.toggleTray());
