@@ -1,0 +1,31 @@
+---
+// components/admin/DashboardStats.astro
+import { supabase } from "../../lib/supabase";
+
+const { count: totalPosts } = await supabase
+  .from("posts")
+  .select("id", { count: "exact" });
+const { count: publishedPosts } = await supabase
+  .from("posts")
+  .select("id", { count: "exact" })
+  .eq("published", true);
+const { count: draftPosts } = await supabase
+  .from("posts")
+  .select("id", { count: "exact" })
+  .eq("published", false);
+---
+
+<div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="rounded-lg border p-4 shadow">
+    <h3 class="text-xl font-bold">Total Posts</h3>
+    <p class="text-3xl font-bold">{totalPosts || 0}</p>
+  </div>
+  <div class="rounded-lg border p-4 shadow">
+    <h3 class="text-xl font-bold">Published Posts</h3>
+    <p class="text-3xl font-bold">{publishedPosts || 0}</p>
+  </div>
+  <div class="rounded-lg border p-4 shadow">
+    <h3 class="text-xl font-bold">Draft Posts</h3>
+    <p class="text-3xl font-bold">{draftPosts || 0}</p>
+  </div>
+</div>

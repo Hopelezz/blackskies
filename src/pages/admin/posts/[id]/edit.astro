@@ -1,0 +1,52 @@
+---
+// src/pages/admin/posts/[id]/edit.astro
+import AdminLayout from "../../../../components/admin/AdminLayout.astro";
+import { getSession } from "../../../../utils/auth";
+import { supabase } from "../../../../lib/supabase";
+import PostEditor from "../../../../components/admin/PostEditor.astro";
+
+// Auth check
+const session = await getSession(Astro);
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+
+if (!accessToken || !refreshToken || !session) {
+  return Astro.redirect("/admin/signin");
+}
+
+const { id } = Astro.params;
+
+// Fetch the post data
+const { data: post, error } = await supabase
+  .from("posts")
+  .select("*")
+  .eq("id", id)
+  .single();
+
+if (error || !post) {
+  return Astro.redirect("/admin/posts");
+}
+
+// Check if user has permission to edit this post
+if (post.author_id !== session.data.session.user.id) {
+  // Optional: Add role check for admins
+  const { data: profile } = await supabase
+    .from("profile")
+    .select("role")
+    .eq("id", session.data.session.user.id)
+    .single();
+
+  if (!profile || profile.role !== "admin") {
+    return Astro.redirect("/admin/posts");
+  }
+}
+---
+
+<AdminLayout title={`Edit Post: ${post.title}`} session={session}>
+  <div class="mb-8">
+    <h1 class="mb-2 text-2xl font-bold">Edit Post</h1>
+    <p class="text-gray-600">Make changes to your post</p>
+  </div>
+
+  <PostEditor post={post} />
+</AdminLayout>

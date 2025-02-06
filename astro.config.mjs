@@ -41,6 +41,7 @@ export default defineConfig({
   vite: {
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
+      include: ["marked", "flowbite"],
     },
   },
 });

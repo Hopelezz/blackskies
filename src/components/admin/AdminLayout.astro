@@ -1,0 +1,27 @@
+---
+// components/admin/AdminLayout.astro
+import type { AdminLayoutProps } from "../../types/props";
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "./Navbar.astro";
+import Sidebar from "./Sidebar.astro";
+
+type Props = AdminLayoutProps;
+const { title, session } = Astro.props;
+---
+
+<Layout title={`Admin - ${title}`}>
+  <Navbar session={session} />
+  <Sidebar session={session} />
+
+  <div class="p-4 sm:ml-64">
+    <div class="mt-14 p-4">
+      <slot />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Initialize Flowbite
+  import { initFlowbite } from "flowbite";
+  initFlowbite();
+</script>

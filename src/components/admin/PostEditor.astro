@@ -1,0 +1,153 @@
+---
+// src/components/admin/PostEditor.astro
+import { supabase } from "../../lib/supabase";
+
+interface Props {
+  post: {
+    id: string;
+    title: string;
+    content: string;
+    tags: string[];
+    published: boolean;
+  };
+}
+
+const { post } = Astro.props;
+---
+
+<div class="space-y-6">
+  <!-- Title Input -->
+  <div>
+    <label for="title" class="block text-sm font-medium text-gray-700"
+      >Title</label
+    >
+    <input
+      type="text"
+      id="title"
+      name="title"
+      value={post.title}
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+      required
+    />
+  </div>
+
+  <!-- Tags Input -->
+  <div>
+    <label for="tags" class="block text-sm font-medium text-gray-700"
+      >Tags</label
+    >
+    <input
+      type="text"
+      id="tags"
+      name="tags"
+      value={post.tags.join(", ")}
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+      placeholder="Comma-separated tags"
+    />
+  </div>
+
+  <!-- Status Dropdown -->
+  <div>
+    <label for="published" class="block text-sm font-medium text-gray-700"
+      >Status</label
+    >
+    <select
+      id="published"
+      name="published"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+    >
+      <option value="true" selected={post.published}>Published</option>
+      <option value="false" selected={!post.published}>Draft</option>
+    </select>
+  </div>
+
+  <!-- Markdown Editor -->
+  <div class="grid h-screen grid-cols-2 gap-4">
+    <div class="col-span-1">
+      <label for="content" class="block text-sm font-medium text-gray-700"
+        >Content</label
+      >
+      <textarea
+        id="markdown-input"
+        name="content"
+        class="h-full w-full rounded-lg border p-4 font-mono text-sm focus:border-blue-500 focus:ring-blue-500"
+        placeholder="Write your markdown here..."
+        required>{post.content}</textarea
+      >
+    </div>
+    <div class="col-span-1">
+      <label class="block text-sm font-medium text-gray-700">Preview</label>
+      <div
+        id="preview"
+        class="prose h-full w-full overflow-auto rounded-lg border p-4"
+      >
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <button
+    type="submit"
+    id="save-post"
+    class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+  >
+    Save Changes
+  </button>
+</div>
+
+<script>
+  import { marked } from "marked";
+
+  const input = document.getElementById("markdown-input");
+  const preview = document.getElementById("preview");
+  const form = document.getElementById("post-editor");
+  const saveButton = document.getElementById("save-post");
+
+  // Update the live preview when the markdown input changes
+  function updatePreview() {
+    if (preview && input) {
+      const markdown = input.value;
+      const parsedMarkdown = marked.parse(markdown);
+      preview.innerHTML = parsedMarkdown;
+    }
+  }
+
+  input?.addEventListener("input", updatePreview);
+
+  // Save the post when the form is submitted
+  saveButton?.addEventListener("click", async e => {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value;
+    const tags = document
+      .getElementById("tags")
+      .value.split(",")
+      .map(tag => tag.trim());
+    const published = document.getElementById("published").value === "true";
+    const content = input.value;
+
+    const data = { title, tags, published, content };
+
+    try {
+      const response = await fetch(`/api/posts/${posts.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Post updated successfully!");
+        window.location.href = "/admin/posts";
+      } else {
+        const { error } = await response.json();
+        alert(`Failed to update post: ${error}`);
+      }
+    } catch (error) {
+      console.error("Error updating post:", error);
+      alert("Failed to update post");
+    }
+  });
+
+  // Initialize the preview with the current content
+  updatePreview();
+</script>

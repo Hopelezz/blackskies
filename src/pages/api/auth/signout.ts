@@ -7,3 +7,5 @@ export const GET: APIRoute = async ({ cookies, redirect }) => {
   cookies.delete("sb-refresh-token", { path: "/" });
   return redirect("/admin/signin");
 };
+
+//How to setup a button to sign out

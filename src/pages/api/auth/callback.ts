@@ -16,11 +16,18 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
 
   const { access_token, refresh_token } = data.session;
 
+  // Set cookies with a global path
   cookies.set("sb-access-token", access_token, {
-    path: "/admin",
+    path: "/", // Make the cookie available for all routes
+    httpOnly: true,
+    secure: true, // Use secure cookies in production
+    sameSite: "strict",
   });
   cookies.set("sb-refresh-token", refresh_token, {
-    path: "/admin",
+    path: "/", // Make the cookie available for all routes
+    httpOnly: true,
+    secure: true, // Use secure cookies in production
+    sameSite: "strict",
   });
 
   return redirect("/admin/dashboard");

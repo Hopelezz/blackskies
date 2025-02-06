@@ -1,0 +1,150 @@
+---
+// components/admin/Navbar.astro
+import { Image } from "astro:assets";
+import type { APIRoute } from "astro";
+const { session } = Astro.props;
+
+// Get the user's email and role
+const email = session?.data?.session?.user?.email || "Guest";
+const role = session?.data?.session?.user?.role || "Guest";
+---
+
+<nav
+  class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+>
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center justify-start">
+        <button
+          data-drawer-target="logo-sidebar"
+          data-drawer-toggle="logo-sidebar"
+          aria-controls="logo-sidebar"
+          type="button"
+          class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden"
+        >
+          <span class="sr-only">Open sidebar</span>
+          <svg
+            class="h-6 w-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            ><path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+            ></path></svg
+          >
+        </button>
+        <a href="/admin" class="ml-2 flex md:mr-24">
+          <span
+            class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
+            >Admin Dashboard</span
+          >
+        </a>
+      </div>
+      <div class="flex items-center">
+        <div class="ml-3 flex items-center">
+          <div>
+            <form class="flex items-center">
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                >
+                  <svg
+                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 0h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"
+                    ></path>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder="Search posts..."
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <button
+            type="button"
+            class="ml-4 flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            id="user-menu-button"
+            aria-expanded="false"
+            data-dropdown-toggle="user-dropdown"
+            data-dropdown-placement="bottom"
+          >
+            <span class="sr-only">Open user menu</span>
+            <div
+              class="relative h-8 w-8 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600"
+            >
+              <svg
+                class="absolute -left-1 h-10 w-10 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                ><path
+                  fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"></path></svg
+              >
+            </div>
+          </button>
+          <!-- Dropdown menu -->
+          <div
+            class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded bg-white text-base shadow dark:divide-gray-600 dark:bg-gray-700"
+            id="user-dropdown"
+          >
+            <div class="px-4 py-3">
+              <span
+                class="block truncate text-sm text-gray-500 dark:text-gray-400"
+                >{email}</span
+              >
+              <!-- User's email -->
+              <span class="block text-sm text-gray-900 dark:text-white"
+                >{role}</span
+              >
+              <!-- User's role  -->
+            </div>
+            <ul class="py-1" aria-labelledby="user-menu-button">
+              <li>
+                <a
+                  href="/admin/profile"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Profile</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/admin/settings"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Settings</a
+                >
+              </li>
+              <li>
+                <form action="/api/auth/signout">
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >Sign out</button
+                  >
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,36 @@
+---
+import AdminLayout from "../../components/admin/AdminLayout.astro";
+import { getSession } from "../../utils/auth";
+import { supabase } from "../../lib/supabase";
+
+import PostsTable from "../../components/admin/PostsTable.astro";
+
+const session = await getSession(Astro);
+// Auth check (same as dashboard)
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+
+if (!accessToken || !refreshToken) {
+  return Astro.redirect("/admin/signin");
+}
+
+// Fetch all posts
+const { data: posts } = await supabase
+  .from("posts")
+  .select("*")
+  .order("created_at", { ascending: false });
+---
+
+<AdminLayout title="Posts" session={session}>
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">All Posts</h1>
+    <a
+      href="/admin/new"
+      class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+    >
+      Create New Post
+    </a>
+  </div>
+
+  <PostsTable posts={posts} showAll={true} />
+</AdminLayout>

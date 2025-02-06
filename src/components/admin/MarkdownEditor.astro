@@ -1,0 +1,31 @@
+---
+// components/admin/MarkdownEditor.astro
+---
+
+<div class="grid h-96 grid-cols-2 gap-4">
+  <div class="col-span-1">
+    <textarea
+      id="markdown-input"
+      class="h-full w-full rounded-lg border p-4 font-mono text-sm focus:border-blue-500 focus:ring-blue-500"
+      placeholder="Write your markdown here..."></textarea>
+  </div>
+  <div class="col-span-1">
+    <div
+      id="preview"
+      class="prose h-full w-full overflow-auto rounded-lg border p-4"
+    >
+    </div>
+  </div>
+</div>
+
+<script>
+  import { marked } from "marked";
+
+  const input = document.getElementById("markdown-input");
+  const preview = document.getElementById("preview");
+
+  input?.addEventListener("input", () => {
+    const markdown = input.value;
+    preview.innerHTML = marked.parse(markdown);
+  });
+</script>

@@ -1,46 +1,73 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+// src/pages/admin/dashboard.astro
+import AdminLayout from "../../components/admin/AdminLayout.astro";
+import { getSession } from "../../utils/auth";
 import { supabase } from "../../lib/supabase";
+import DashboardStats from "../../components/admin/DashboardStats.astro";
+import PostsTable from "../../components/admin/PostsTable.astro";
 
-const accessToken = Astro.cookies.get("sb-access-token");
-const refreshToken = Astro.cookies.get("sb-refresh-token");
-
-if (!accessToken || !refreshToken) {
+const session = await getSession(Astro);
+if (!session) {
   return Astro.redirect("/admin/signin");
 }
 
-let session;
-try {
-  session = await supabase.auth.setSession({
-    refresh_token: refreshToken.value,
-    access_token: accessToken.value,
-  });
-  if (session.error) {
-    Astro.cookies.delete("sb-access-token", {
-      path: "/admin",
-    });
-    Astro.cookies.delete("sb-refresh-token", {
-      path: "/admin",
-    });
-    return Astro.redirect("/admin/signin");
-  }
-} catch (error) {
-  Astro.cookies.delete("sb-access-token", {
-    path: "/admin",
-  });
-  Astro.cookies.delete("sb-refresh-token", {
-    path: "/admin",
-  });
-  return Astro.redirect("/admin/signin");
+const { data: posts } = await supabase
+  .from("posts")
+  .select("*")
+  .order("created_at", { ascending: false })
+  .limit(5);
+
+// Fetch the user's profile data including Role
+const { data: profile, error: profileError } = session
+  ? await supabase
+      .from("profile")
+      .select(
+        `
+        id,
+        user_id,
+        username,
+        full_name,
+        email,
+        role,
+        bio,
+        created_at,
+        updated_at
+      `
+      )
+      .eq("user_id", session.data.session.user.id)
+      .single()
+  : { data: null, error: null };
+
+if (profileError) {
+  console.error("Error fetching profile:", profileError.message);
 }
 
-const email = session.data.user?.email;
+// Make admin read as Admin
+if (profile?.role === "admin") {
+  profile.role = "Admin";
+}
 ---
 
-<Layout title="dashboard">
-  <h1>Welcome {email}</h1>
-  <p>We are happy to see you here</p>
-  <form action="/api/auth/signout">
-    <button type="submit">Sign out</button>
-  </form>
-</Layout>
+<AdminLayout title="Dashboard" session={session}>
+  <div class="mb-8">
+    <h1 class="mb-2 text-2xl font-bold">
+      Welcome, {profile?.full_name || "User"} ({profile?.role})
+    </h1>
+    <p class="text-gray-600">Manage your content from here</p>
+  </div>
+
+  <DashboardStats session={session} />
+
+  <div class="mt-8">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-bold">Recent Posts</h2>
+      <a
+        href="/admin/new"
+        class="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
+      >
+        Create New Post
+      </a>
+    </div>
+    <PostsTable posts={posts ?? []} />
+  </div>
+</AdminLayout>
