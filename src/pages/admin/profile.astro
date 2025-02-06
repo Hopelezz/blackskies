@@ -1,19 +1,33 @@
 ---
 // src/pages/admin/profile.astro
 import AdminLayout from "../../components/admin/AdminLayout.astro";
+import { getSession } from "../../utils/auth";
 import { supabase } from "../../lib/supabase";
 
-const { session } = Astro.props;
-
+const session = await getSession(Astro);
+if (!session) {
+  return Astro.redirect("/admin/signin");
+}
 // Only fetch profile data if we have a session
 const { data: profile, error: profileError } = session
   ? await supabase
       .from("profile")
-      .select("*")
-      .eq("user_id", session.data.user.id) // Use user_id instead of id
+      .select(
+        `
+        id,
+        user_id,
+        username,
+        full_name,
+        email,
+        role,
+        bio,
+        created_at,
+        updated_at
+      `
+      )
+      .eq("user_id", session.data.session.user.id)
       .single()
   : { data: null, error: null };
-console.log(profile);
 
 if (profileError) {
   console.error("Error fetching profile:", profileError.message);
@@ -24,7 +38,7 @@ const { count: postsCount } = session
   ? await supabase
       .from("posts")
       .select("id", { count: "exact" })
-      .eq("author_id", session.data.user.id)
+      .eq("author_id", session.data.session.user.id)
   : { count: 0 };
 ---
 
@@ -122,12 +136,18 @@ const { count: postsCount } = session
             <div class="text-gray-600">Posts</div>
           </div>
           <div class="text-center">
-            <div class="text-xl font-bold">{profile?.followers_count || 0}</div>
-            <div class="text-gray-600">Followers</div>
+            <div class="text-xl font-bold text-gray-300">
+              {profile?.followers_count || 0}
+            </div>
+            <!-- Add followers count later -->
+            <div class="text-gray-300">Followers</div>
           </div>
           <div class="text-center">
-            <div class="text-xl font-bold">{profile?.following_count || 0}</div>
-            <div class="text-gray-600">Following</div>
+            <div class="text-xl font-bold text-gray-300">
+              {profile?.following_count || 0}
+            </div>
+            <!-- Add following count later -->
+            <div class="text-gray-300">Following</div>
           </div>
         </div>
       </div>

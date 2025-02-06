@@ -117,10 +117,12 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     );
   } catch (error) {
     console.error("Server error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return new Response(
       JSON.stringify({
         error: "Server error",
-        details: error.message,
+        details: errorMessage,
       }),
       { status: 500 }
     );
