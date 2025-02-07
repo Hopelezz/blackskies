@@ -59,23 +59,23 @@ const socialImageURL = new URL(
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
-      rel="stylesheet"
-    />
+
     <!-- Flowbite CSS -->
     <link
-      href="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css"
     />
+    
     <Cursor />
   </head>
   <body>
     <slot />
 
     <!-- Flowbite JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"
-    ></script>
-  </body>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
 </html>
+
+<script>
+  // Initialize Flowbite
+  import 'flowbite';
+</script>

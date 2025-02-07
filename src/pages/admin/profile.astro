@@ -40,6 +40,8 @@ const { count: postsCount } = session
       .select("id", { count: "exact" })
       .eq("author_id", session.data.session.user.id)
   : { count: 0 };
+
+
 ---
 
 <AdminLayout title="Profile" session={session}>
@@ -97,12 +99,9 @@ const { count: postsCount } = session
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Role</label>
-            <input
-              type="text"
-              name="role"
-              value={profile?.role || ""}
-              class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-            />
+            <div class="mt-1- block w-full rounded-md border-dotted border-gray-300 p-2 shadow-sm">{profile?.role || ""}
+              
+            <div/>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Bio</label>
@@ -137,14 +136,16 @@ const { count: postsCount } = session
           </div>
           <div class="text-center">
             <div class="text-xl font-bold text-gray-300">
-              {profile?.followers_count || 0}
+              <!-- {profile?.followers_count || 0} -->
+               0
             </div>
             <!-- Add followers count later -->
             <div class="text-gray-300">Followers</div>
           </div>
           <div class="text-center">
             <div class="text-xl font-bold text-gray-300">
-              {profile?.following_count || 0}
+              <!-- {profile?.following_count || 0} -->
+               0
             </div>
             <!-- Add following count later -->
             <div class="text-gray-300">Following</div>
@@ -160,7 +161,7 @@ const { count: postsCount } = session
   const editBtn = document.getElementById("editProfileBtn");
   const cancelBtn = document.getElementById("cancelBtn");
   const profileView = document.getElementById("profileView");
-  const profileForm = document.getElementById("profileForm");
+  const profileForm = document.getElementById("profileForm") as HTMLFormElement;
 
   editBtn?.addEventListener("click", () => {
     profileView?.classList.add("hidden");
@@ -170,5 +171,44 @@ const { count: postsCount } = session
   cancelBtn?.addEventListener("click", () => {
     profileView?.classList.remove("hidden");
     profileForm?.classList.add("hidden");
+  });
+
+  // Handle form submission
+  profileForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(profileForm);
+    const profileData = {
+      username: formData.get("username"),
+      email: formData.get("email"),
+      full_name: formData.get("full_name"),
+      bio: formData.get("bio"),
+    };
+
+    try {
+      const response = await fetch("/api/profile/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to update profile");
+      }
+
+      // Refresh the page to show updated data
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unknown error occurred");
+      }
+    }
   });
 </script>

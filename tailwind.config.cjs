@@ -16,6 +16,7 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
+    extend: {},
     screens: {
       sm: "640px",
       md: "768px", // Added for Flowbite compatibility
@@ -84,7 +85,6 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    require('flowbite/plugin')
+    require('@tailwindcss/typography', 'flowbite/plugin'),
   ],
 };

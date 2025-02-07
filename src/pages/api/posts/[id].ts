@@ -1,89 +1,66 @@
-// /src/pages/api/posts/[id].ts
+// src/pages/api/posts/[id].ts
 import type { APIRoute } from "astro";
 import { supabase } from "../../../lib/supabase";
 
 export const DELETE: APIRoute = async ({ params, cookies }) => {
-  const accessToken = cookies.get("sb-access-token");
-  const refreshToken = cookies.get("sb-refresh-token");
-
-  if (!accessToken || !refreshToken) {
-    return new Response(
-      JSON.stringify({ error: "Unauthorized: Missing tokens" }),
-      {
-        status: 401,
-      }
-    );
-  }
-
   try {
-    // Set the session
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.setSession({
-      refresh_token: refreshToken.value,
-      access_token: accessToken.value,
-    });
+    const { id } = params;
+    const accessToken = cookies.get("sb-access-token")?.value;
+    const refreshToken = cookies.get("sb-refresh-token")?.value;
 
-    if (sessionError || !session) {
-      console.error("Session error:", sessionError);
-      return new Response(JSON.stringify({ error: "Invalid session" }), {
-        status: 401,
-      });
-    }
-
-    // Log the session user ID
-    console.log("Session user ID:", session.user.id);
-
-    // Fetch the user's role from the profiles table
-    const { data: profile, error: profileError } = await supabase
-      .from("profile")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    if (profileError || !profile) {
-      console.error("Error fetching profile:", profileError);
+    if (!accessToken || !refreshToken) {
       return new Response(
-        JSON.stringify({ error: "Failed to fetch user role" }),
-        {
-          status: 500,
-        }
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401 }
       );
     }
 
-    // Log the user's role
-    console.log("User role:", profile.role);
-
-    const postId = params.id;
-
-    // First, fetch the post to check ownership
-    const { data: post, error: postFetchError } = await supabase
-      .from("posts")
-      .select("author_id")
-      .eq("id", postId)
-      .single();
-
-    if (postFetchError) {
-      console.error("Error fetching post:", postFetchError);
-      return new Response(JSON.stringify({ error: "Failed to fetch post" }), {
-        status: 500,
-      });
+    // Get the current user's session
+    const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
+    
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Invalid session" }),
+        { status: 401 }
+      );
     }
 
-    // Check if user has permission to delete the post
-    const isAdmin = profile.role === "admin";
-    const isEditor = profile.role === "editor";
-    const isAuthor = post.author_id === session.user.id;
+    // Get the user's profile to check role
+    const { data: profile, error: profileError } = await supabase
+      .from("profile")
+      .select("role")
+      .eq("user_id", user.id)
+      .single();
 
-    if (!isAdmin && !isEditor && !isAuthor) {
+    if (profileError) {
       return new Response(
-        JSON.stringify({
-          error: "Unauthorized: Must be admin, editor, or post author",
-        }),
-        {
-          status: 403,
-        }
+        JSON.stringify({ error: "Failed to fetch user role" }),
+        { status: 500 }
+      );
+    }
+
+    // Get the post to check ownership
+    const { data: post, error: postError } = await supabase
+      .from("posts")
+      .select("author_id")
+      .eq("id", id)
+      .single();
+
+    if (postError) {
+      return new Response(
+        JSON.stringify({ error: "Post not found" }),
+        { status: 404 }
+      );
+    }
+
+    // Check if user is authorized to delete the post
+    const isAdmin = profile?.role === "admin";
+    const isAuthor = post.author_id === user.id;
+
+    if (!isAdmin && !isAuthor) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized to delete this post" }),
+        { status: 403 }
       );
     }
 
@@ -91,96 +68,165 @@ export const DELETE: APIRoute = async ({ params, cookies }) => {
     const { error: deleteError } = await supabase
       .from("posts")
       .delete()
-      .eq("id", postId);
+      .eq("id", id);
 
     if (deleteError) {
-      console.error("Error deleting post:", deleteError);
-      return new Response(JSON.stringify({ error: deleteError.message }), {
-        status: 500,
-      });
+      return new Response(
+        JSON.stringify({ error: deleteError.message }),
+        { status: 500 }
+      );
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Post deleted successfully",
-      }),
-      {
-        status: 200,
-      }
+      JSON.stringify({ message: "Post deleted successfully" }),
+      { status: 200 }
     );
   } catch (error) {
-    console.error("API Error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({
-        error: "Internal server error",
-        details: errorMessage,
-      }),
+      JSON.stringify({ error: "Server error" }),
       { status: 500 }
     );
   }
 };
 
-export const PUT: APIRoute = async ({ request, params, cookies }) => {
-  const accessToken = cookies.get("sb-access-token");
-  const refreshToken = cookies.get("sb-refresh-token");
-
-  if (!accessToken || !refreshToken) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-    });
-  }
-
+export const PUT: APIRoute = async ({ params, request, cookies }) => {
   try {
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.setSession({
-      refresh_token: refreshToken.value,
-      access_token: accessToken.value,
-    });
+    const { id } = params;
+    const accessToken = cookies.get("sb-access-token")?.value;
+    const refreshToken = cookies.get("sb-refresh-token")?.value;
 
-    if (sessionError || !session) {
-      return new Response(JSON.stringify({ error: "Invalid session" }), {
-        status: 401,
-      });
-    }
-
-    const data = await request.json();
-    const { title, slug, content, tags, status } = data;
-
-    if (!title || !slug || !content) {
+    if (!accessToken || !refreshToken) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
-        { status: 400 }
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401 }
       );
     }
 
-    const { error: updateError } = await supabase
+    // Get the current user's session
+    const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
+
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Invalid session" }),
+        { status: 401 }
+      );
+    }
+
+    // Get the user's profile to check role
+    const { data: profile, error: profileError } = await supabase
+      .from("profile")
+      .select("role")
+      .eq("user_id", user.id)
+      .single();
+
+    if (profileError) {
+      return new Response(
+        JSON.stringify({ error: "Failed to fetch user role" }),
+        { status: 500 }
+      );
+    }
+
+    // Get the post to check ownership
+    const { data: post, error: postError } = await supabase
+      .from("posts")
+      .select("author_id, slug")
+      .eq("id", id)
+      .single();
+
+    if (postError) {
+      return new Response(
+        JSON.stringify({ error: "Post not found" }),
+        { status: 404 }
+      );
+    }
+
+    // Check if user is authorized to update the post
+    const isAdmin = profile?.role === "admin";
+    const isAuthor = post.author_id === user.id;
+
+    if (!isAdmin && !isAuthor) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized to update this post" }),
+        { status: 403 }
+      );
+    }
+
+    // Parse the request body
+    const formData = await request.json();
+    const { title, slug, content, tags, published = false } = formData;
+
+    // Check if the slug is being updated and ensure it's unique
+    if (slug && slug !== post.slug) {
+      const { data: existingPost, error: slugError } = await supabase
+        .from("posts")
+        .select("id")
+        .eq("slug", slug)
+        .single();
+
+      if (slugError && slugError.code !== "PGRST116") {
+        // PGRST116 means no rows were found, so it's safe to ignore
+        return new Response(
+          JSON.stringify({ error: "Error checking slug uniqueness" }),
+          { status: 500 }
+        );
+      }
+
+      if (existingPost) {
+        return new Response(
+          JSON.stringify({ error: "Slug already exists" }),
+          { status: 400 }
+        );
+      }
+    }
+
+    // Update the post
+    const { data, error: updateError } = await supabase
       .from("posts")
       .update({
         title,
         slug,
         content,
-        tags: tags || [],
-        published: status === "published",
+        tags,
+        published,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", params.id);
+      .eq("id", id)
+      .select()
+      .single();
 
     if (updateError) {
-      return new Response(JSON.stringify({ error: updateError.message }), {
-        status: 500,
-      });
+      return new Response(
+        JSON.stringify({ error: updateError.message }),
+        { status: 500 }
+      );
     }
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return new Response(
+      JSON.stringify({ data }),
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Server error:", error);
-    return new Response(JSON.stringify({ error: "Server error" }), {
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({ error: "Server error" }),
+      { status: 500 }
+    );
+  }
+};
+
+// [WARN] [router] No API Route handler exists for the method "GET" for the route "/api/posts/check-slug".
+
+export const GET: APIRoute = async ({ params }) => {
+  const { slug } = params;
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+  if (!data) {
+    return new Response(JSON.stringify({ available: true }), { status: 200 });
+  } else {
+    return new Response(JSON.stringify({ available: false }), { status: 200 });
   }
 };

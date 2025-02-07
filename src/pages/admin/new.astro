@@ -1,110 +1,26 @@
 ---
 // src/pages/admin/new.astro
 import AdminLayout from "../../components/admin/AdminLayout.astro";
-import MarkdownEditor from "../../components/admin/MarkdownEditor.astro";
+import { getSession } from "../../utils/auth";
+import { supabase } from "../../lib/supabase";
+import PostEditor from "../../components/admin/PostEditor.astro";
+
+// Auth check
+const session = await getSession(Astro);
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+
+if (!accessToken || !refreshToken || !session) {
+  return Astro.redirect("/admin/signin");
+}
+
 ---
 
-<AdminLayout title="New Post">
-  <form id="post-form" class="space-y-4">
-    <div>
-      <label for="title" class="block text-sm font-medium text-gray-700"
-        >Title</label
-      >
-      <input type="text" id="title" name="title" class="input" required />
-    </div>
-    <div>
-      <label for="slug" class="block text-sm font-medium text-gray-700"
-        >Slug</label
-      >
-      <input type="text" id="slug" name="slug" class="input" required />
-    </div>
-    <div>
-      <label for="tags" class="block text-sm font-medium text-gray-700"
-        >Tags</label
-      >
-      <input type="text" id="tags" name="tags" class="input" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Content</label>
-      <MarkdownEditor />
-    </div>
-    <div class="flex justify-end space-x-4">
-      <button type="button" id="save-draft" class="btn-secondary"
-        >Save as Draft</button
-      >
-      <button type="submit" class="btn-primary">Publish</button>
-    </div>
-  </form>
+<AdminLayout title={`Create New Post`} session={session}>
+  <div class="mb-8">
+    <h1 class="mb-2 text-2xl font-bold">Create New Post</h1>
+    <p class="text-gray-600">"Creativity is seeing what everyone else has seen, and thinking what no one else has thought." – Albert Einstein</p>
+  </div>
+
+  <PostEditor />
 </AdminLayout>
-
-<script>
-  const form = document.getElementById("post-form") as HTMLFormElement;
-  const titleInput = document.getElementById("title") as HTMLInputElement;
-  const slugInput = document.getElementById("slug") as HTMLInputElement;
-  const tagsInput = document.getElementById("tags") as HTMLInputElement;
-  const markdownInput = document.getElementById(
-    "markdown-input"
-  ) as HTMLTextAreaElement;
-  const saveDraftBtn = document.getElementById("save-draft");
-
-  // Auto-generate slug from title
-  titleInput?.addEventListener("input", (e: Event) => {
-    const title = (e.target as HTMLInputElement).value;
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-    slugInput.value = slug;
-  });
-
-  // Handle form submission
-  form?.addEventListener("submit", async (e: Event) => {
-    e.preventDefault();
-    await savePost(false);
-  });
-
-  saveDraftBtn?.addEventListener("click", async () => {
-    await savePost(true);
-  });
-
-  async function savePost(isDraft: boolean) {
-    try {
-      const title = titleInput.value.trim();
-      const slug = slugInput.value.trim();
-      const content = markdownInput.value.trim();
-      const tags = tagsInput.value
-        .split(",")
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
-
-      if (!title || !slug || !content) {
-        throw new Error("Please fill in all required fields");
-      }
-
-      const response = await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          slug,
-          content,
-          tags,
-          status: isDraft ? "draft" : "published",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to save post");
-      }
-
-      window.location.href = "/admin/posts";
-    } catch (error) {
-      console.error("Error saving post:", error);
-      alert(error.message);
-    }
-  }
-</script>

@@ -1,0 +1,28 @@
+---
+// src/pages/admin/users.astro
+import AdminLayout from "../../components/admin/AdminLayout.astro";
+import UsersManagement from "../../components/admin/UsersManagement.astro";
+import { getSession } from "../../utils/auth";
+import { supabase } from "../../lib/supabase";
+
+const session = await getSession(Astro);
+if (!session) {
+  return Astro.redirect("/admin/signin");
+}
+
+// Get user's role
+const { data: profile } = await supabase
+  .from("profile")
+  .select("role")
+  .eq("user_id", session.data.session.user.id)
+  .single();
+
+// Only allow admins to access this page
+if (profile?.role !== "admin") {
+  return Astro.redirect("/admin/dashboard");
+}
+---
+
+<AdminLayout title="User Management" session={session}>
+  <UsersManagement currentUserRole={profile.role} />
+</AdminLayout>

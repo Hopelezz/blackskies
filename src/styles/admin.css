@@ -1,0 +1,151 @@
+```css
+/* admin.css */
+
+/* General Admin Page Styles */
+body.admin {
+  background-color: #f9fafb; /* Light gray background for admin pages */
+  color: #1f2937; /* Dark text for readability */
+  font-family: 'Inter', sans-serif; /* Consistent font with Tailwind */
+}
+
+/* Admin Header Styles */
+.admin-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e40af; /* Primary blue color */
+  margin-bottom: 1rem;
+}
+
+/* Admin Card Styles */
+.admin-card {
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 0.5rem; /* Rounded corners */
+  padding: 1rem;
+  background-color: #ffffff; /* White background */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Admin Button Styles */
+.admin-btn-primary {
+  background-color: #2563eb; /* Primary blue */
+  color: #ffffff; /* White text */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.admin-btn-primary:hover {
+  background-color: #1d4ed8; /* Darker blue on hover */
+}
+
+.admin-btn-secondary {
+  background-color: #e5e7eb; /* Light gray */
+  color: #1f2937; /* Dark text */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.admin-btn-secondary:hover {
+  background-color: #d1d5db; /* Darker gray on hover */
+}
+
+/* Admin Modal Styles */
+.admin-modal {
+  background-color: #ffffff; /* White background */
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.admin-modal-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937; /* Dark text */
+  margin-bottom: 1rem;
+}
+
+.admin-modal-warning {
+  border-left: 4px solid #f59e0b; /* Amber border for warnings */
+  background-color: #fffbeb; /* Light amber background */
+  color: #92400e; /* Dark amber text */
+  padding: 1rem;
+  border-radius: 0.375rem;
+}
+
+.admin-modal-error {
+  border-left: 4px solid #ef4444; /* Red border for errors */
+  background-color: #fef2f2; /* Light red background */
+  color: #991b1b; /* Dark red text */
+  padding: 1rem;
+  border-radius: 0.375rem;
+}
+
+/* Admin Table Styles */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-table th {
+  background-color: #f3f4f6; /* Light gray header background */
+  color: #1f2937; /* Dark text */
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid #e5e7eb; /* Light gray border */
+}
+
+.admin-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb; /* Light gray border */
+}
+
+.admin-table tr:hover {
+  background-color: #f9fafb; /* Light gray hover effect */
+}
+
+/* Admin Input Styles */
+.admin-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* Light gray border */
+  border-radius: 0.375rem;
+  background-color: #f9fafb; /* Light gray background */
+  color: #1f2937; /* Dark text */
+  font-size: 0.875rem;
+}
+
+.admin-input:focus {
+  border-color: #2563eb; /* Primary blue border on focus */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); /* Blue focus ring */
+}
+
+/* Admin Badge Styles */
+.admin-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+}
+
+.admin-badge-success {
+  background-color: #d1fae5; /* Light green background */
+  color: #065f46; /* Dark green text */
+}
+
+.admin-badge-warning {
+  background-color: #fef3c7; /* Light amber background */
+  color: #92400e; /* Dark amber text */
+}
+
+.admin-badge-error {
+  background-color: #fee2e2; /* Light red background */
+  color: #991b1b; /* Dark red text */
+}

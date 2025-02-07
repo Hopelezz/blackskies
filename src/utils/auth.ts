@@ -8,55 +8,64 @@ export async function getSession(Astro: AstroGlobal) {
   const refreshToken = Astro.cookies.get("sb-refresh-token");
 
   if (!accessToken || !refreshToken) {
-    console.log("No tokens found");
     return null;
   }
 
   try {
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.setSession({
-      access_token: accessToken.value,
-      refresh_token: refreshToken.value,
+    // First try to get the user with the current access token
+    const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken.value);
+
+    if (!userError && user) {
+      // If access token is still valid, return the session
+      return {
+        data: {
+          session: {
+            access_token: accessToken.value,
+            refresh_token: refreshToken.value,
+            user
+          }
+        },
+        error: null
+      } as SessionData;
+    }
+
+    // If access token is invalid, try to refresh
+    const { data: { session }, error: refreshError } = await supabase.auth.refreshSession({
+      refresh_token: refreshToken.value
     });
 
-    if (error) {
-      console.error("Session error:", error.message);
+    if (refreshError || !session) {
+      // If refresh fails, clear cookies and return null
+      Astro.cookies.delete("sb-access-token", { path: "/" });
+      Astro.cookies.delete("sb-refresh-token", { path: "/" });
       return null;
     }
 
-    if (!session) {
-      console.log("No session found after setting tokens");
-      return null;
-    }
+    // Update cookies with new tokens
+    Astro.cookies.set("sb-access-token", session.access_token, {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    });
+    
+    Astro.cookies.set("sb-refresh-token", session.refresh_token, {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    });
 
-    // Get user profile/role
-    const { data: profile, error: profileError } = await supabase
-      .from("profile")
-      .select("*") // Select all fields from profile
-      .eq("user_id", session.user.id) // Ensure session.user.id is a UUID
-      .single();
-
-    if (profileError) {
-      console.error("Profile error:", profileError.message);
-    }
-
-    // Return the session with the correct structure
     return {
-      data: {
-        session: {
-          ...session,
-          user: {
-            ...session.user,
-            role: profile?.role, // Add role from profile
-          },
-        },
-      },
-      error: null,
+      data: { session },
+      error: null
     } as SessionData;
+
   } catch (error) {
     console.error("Auth error:", error);
+    // Clear cookies on error
+    Astro.cookies.delete("sb-access-token", { path: "/" });
+    Astro.cookies.delete("sb-refresh-token", { path: "/" });
     return null;
   }
 }

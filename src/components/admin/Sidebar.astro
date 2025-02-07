@@ -1,6 +1,14 @@
 ---
 // components/admin/Sidebar.astro
+import { supabase } from "../../lib/supabase";
+
 const { session } = Astro.props; //Prepped just in case we need for later
+
+const { data: profile } = await supabase
+  .from("profile")
+  .select("role")
+  .eq("user_id", session.data.session.user.id)
+  .single();
 ---
 
 <aside
@@ -81,13 +89,52 @@ const { session } = Astro.props; //Prepped just in case we need for later
               >New Post</a
             >
           </li>
-          <li>
+          <!-- <li>
             <a
               href="/admin/categories"
               class="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >Categories</a
             >
+          </li> -->
+          {profile?.role === "admin" && (
+            <li>
+              <a
+                href="/admin/users"
+                class="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              >
+                <svg
+                  class="h-6 w-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                </svg>
+                <span class="ml-3">Users</span>
+              </a>
+            </li>
+            <li>
+            <a
+              href="/admin/create-test-account"
+              class="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            >
+              <svg
+                class="h-6 w-6 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                />
+              </svg>
+              <span class="ml-3">Create Test Account</span>
+            </a>
           </li>
+          )}
         </ul>
       </li>
       <!-- If I ever get to media -->

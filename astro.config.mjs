@@ -5,6 +5,7 @@ import react from "@astrojs/react";
 import remarkCollapse from "remark-collapse";
 import sitemap from "@astrojs/sitemap";
 import { SITE } from "./src/config";
+import netlify from "@astrojs/netlify"; 
 
 import mdx from "@astrojs/mdx";
 
@@ -15,12 +16,13 @@ export default defineConfig({
   integrations: [
     tailwind({
       config: {
-        applyBaseStyles: false,
+        // applyBaseStyles: false,
       },
     }),
     react(),
     sitemap(),
     mdx(),
+    netlify(),
   ],
   markdown: {
     remarkPlugins: [
