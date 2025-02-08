@@ -3,11 +3,10 @@
 import { Image } from "astro:assets";
 import type { APIRoute } from "astro";
 import  Search  from "../../components/admin/Search.astro";
-const { session } = Astro.props;
+const { profile } = Astro.props;
 
-
-const { email, role } = session.data.session.user;
-
+const email = profile?.email;
+const role = profile?.role.charAt(0).toUpperCase() + profile?.role.slice(1)
 ---
 
 <nav class="fixed top-0 z-50 w-full border-b border-skin-line bg-skin-fill">

@@ -139,7 +139,7 @@ export const PUT: APIRoute = async ({ request, params, cookies }) => {
 
     // Check if new slug is unique (if changed)
     if (slug !== post.slug) {
-      const { data: existingPost, error: slugError } = await supabase
+      const { data: existingPost } = await supabase
         .from("posts")
         .select("id")
         .eq("slug", slug)

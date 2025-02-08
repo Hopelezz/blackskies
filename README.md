@@ -48,12 +48,26 @@
 
 [BlackSkies] is your go-to place for all things tech and programming. Whether you're a seasoned developer or just dipping your toes into the digital universe, we've got something for you. From coding tips to tech reviews, we're here to make your journey through the black skies of technology a little brighter.
 
+### Key Features
+
+- 🔐 Secure Authentication with Supabase
+- 📝 Markdown Post Editor with Live Preview
+- 👥 Role-Based Access Control
+- 🎨 Responsive Admin Dashboard
+- 📊 Post Analytics and Statistics
+- 🏷️ Tag Management System
+- 🌓 Dark Mode Support
+- 📱 Mobile-Friendly Design
+- 🚀 Fast and Performant
+
 ### Built With
 
-- [Astro](https://astro.build)
-- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
-- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [Astro](https://astro.build) - Static Site Generator
+- [Supabase](https://supabase.com) - Backend & Authentication
+- [Flowbite](https://flowbite.com) - UI Components
+- [TailwindCSS](https://tailwindcss.com) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type Safety
+- [Marked](https://marked.js.org/) - Markdown Parser
 
 ## Getting Started
 
@@ -81,29 +95,87 @@ To get a local copy up and running follow these simple steps.
      npm run astro dev
    ```
 
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+PUBLIC_SUPABASE_URL=your_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+PUBLIC_SITE_URL=your_site_url
+```
+
 ## Usage
 
 The blog posts and content are written in markdown and can be found in the `src/posts` directory. To add a new post, simply create a new markdown file in the `src/posts` directory and follow the existing markdown files as a template.
 
 ## Roadmap
 
-### Features
+### Project Implementation Todo List
 
-- [ ] Add an `About Me` page
-- [ ] Add a `404` page
-- [x] Add a Search Feature to query the posts for keywords
-- [ ] Make the Page More Accessible
-- [x] Rebuild the default component system.
+#### 1. Authentication & Authorization
+- [x] Implement Supabase authentication
+- [x] Add sign-in/sign-out functionality
+- [ ] Implement role-based access control
+  - [x] Admin role with full access
+  - [ ] Editor role with content management
+  - [ ] Author role with personal content control
+  - [ ] Viewer role with read-only access
 
-### Style
+#### 2. User Interface & Design
+- [x] Integrate Flowbite components
+- [ ] Implement custom admin styling
+  - [ ] Create admin.css for consistent styling in admin routes
+  - [ ] Add dark mode support for admin routes
+  - [ ] Style admin dashboard
+- [ ] Add responsive design improvements
+  - [ ] Mobile-friendly navigation
+  - [ ] Adaptive layouts
+  - [ ] Touch-friendly controls
 
-- [x] Add a Dark Theme.
-- [ ] Make the Page More responsive to Mobile.
-- [ ] Add a RightSideBar that shows the `Post headers`.
+#### 3. Content Management
+- [x] Create post editor
+- [x] Implement markdown support
+- [ ] Add media management
+  - [ ] Image upload and optimization
+  - [ ] Video embed support
+- [x] Implement tagging system
+  - [ ] Tag-based post filtering
+  - [ ] Tag creation and management
+  - [ ] Tag-based filtering
+  - [ ] Tag cloud visualization
 
-### End Goal
+#### 4. Admin Features
+- [x] Dashboard statistics
+- [ ] User management interface
+  - [ ] User list with role management
+  - [ ] User profile editing
+  - [ ] Activity logging
+- [ ] Content workflow
+  - [x] Draft/publish system (Part of the post editor/Post Table)
+  - [ ] Content scheduling (Can use the flowbite calendar)
+  - [ ] Review process (Maybe have an editor role, or a review process with forced formatting?)
 
-- [ ] Create a template for the Astro Framework based on what I've learned here
+#### 5. Performance & Security
+- [ ] Implement caching
+- [ ] Add rate limiting (May not be needed due to setup.)
+- [ ] Security improvements
+  - [ ] Input validation
+  - [x] DOMPurifier for script sanitization in the post editor
+  - [ ] XSS protection
+  - [ ] CSRF protection
+- [ ] Performance monitoring
+
+#### 6. Additional Features
+- [ ] Search functionality (Can use the flowbite search component)
+  - [ ] Full-text search
+  - [ ] Advanced filters
+- [ ] Analytics integration
+- [ ] API documentation
+- [ ] Automated testing
+  - [ ] Unit tests
+  - [ ] Integration tests
+  - [ ] E2E tests
 
 See the [open issues](https://github.com/Hopelezz/HopelezzBlog/issues) for a full list of proposed features (and known issues).
 

@@ -1,5 +1,13 @@
 ---
 // components/admin/PostsTable.astro
+import type { Post } from "../../types/post";
+
+export interface Props {
+  posts: Post[];
+  showAll?: boolean;
+}
+
+
 const { posts, showAll = false } = Astro.props;
 ---
 

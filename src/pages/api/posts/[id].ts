@@ -219,7 +219,7 @@ export const PUT: APIRoute = async ({ params, request, cookies }) => {
 export const GET: APIRoute = async ({ params }) => {
   const { slug } = params;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("posts")
     .select("id")
     .eq("slug", slug)

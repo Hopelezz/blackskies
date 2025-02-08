@@ -2,19 +2,13 @@
 // components/admin/Sidebar.astro
 import { supabase } from "../../lib/supabase";
 
-const { session } = Astro.props;
+const { profile: userProfile } = Astro.props;
 
 // Get current path for active state
 const currentPath = Astro.url.pathname;
 
-// Only fetch profile data if we have a valid session
-const { data: profile } = session?.data?.session?.user?.id
-  ? await supabase
-      .from("profile")
-      .select("role")
-      .eq("user_id", session.data.session.user.id)
-      .single()
-  : { data: null };
+// Check if the user is an admin
+const profile = userProfile || null;
 
 const isAdmin = profile?.role === "admin";
 
