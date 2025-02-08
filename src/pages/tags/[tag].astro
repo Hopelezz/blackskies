@@ -1,54 +1,76 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
+// src/pages/tags/[tag].astro
+import { SITE } from "@config";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
-import Card from "@components/Card";
-import getUniqueTags from "@utils/getUniqueTags";
-import getPostsByTag from "@utils/getPostsByTag";
-import slugify from "@utils/slugify";
-import { SITE } from "@config";
+import Card from "@components/Card.astro";
+import { supabase } from "../../lib/supabase";
 
-export interface Props {
-  post: CollectionEntry<"blog">;
-  tag: string;
+// Get the tag parameter from the URL
+const { tag } = Astro.params;
+
+if (!tag) {
+  return Astro.redirect('/404');
 }
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+// Fetch posts with this tag
+const { data: posts, error } = await supabase
+  .from('posts')
+  .select(`
+    *,
+    profile:author_id (
+      username,
+      full_name
+    )
+  `)
+  .eq('published', true)
+  .contains('tags', [tag])
+  .order('created_at', { ascending: false });
 
-  const tags = getUniqueTags(posts);
-
-  return tags.map(tag => {
-    return {
-      params: { tag },
-      props: { tag },
-    };
-  });
+if (error) {
+  console.error('Error fetching posts:', error);
 }
 
-const { tag } = Astro.props;
-
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-const tagPosts = getPostsByTag(posts, tag);
+const tagPosts = posts || [];
 ---
 
-<Layout title={`Tag:${tag} | ${SITE.title}`}>
+<Layout title={`Tag: ${tag} | ${SITE.title}`}>
   <Header activeNav="tags" />
   <Main
-    pageTitle={`Tag:${tag}`}
-    pageDesc={`All the articles with the tag "${tag}".`}
+    pageTitle={`Tag: ${tag}`}
+    pageDesc={`All posts tagged with "${tag}"`}
   >
-    <ul>
-      {
-        tagPosts.map(({ data }) => (
-          <Card href={`/posts/${slugify(data)}`} frontmatter={data} />
-        ))
-      }
-    </ul>
+    {
+      tagPosts.length > 0 ? (
+        <ul>
+          {tagPosts.map(post => (
+            <Card
+              href={`/post/${post.slug}`}
+              frontmatter={{
+                title: post.title,
+                description: post.description || "",
+                pubDatetime: new Date(post.created_at),
+                tags: post.tags || [],
+                author: post.profile?.full_name || "Anonymous"
+              }}
+              secHeading={false}
+            />
+          ))}
+        </ul>
+      ) : (
+        <div class="text-center">
+          <p class="text-lg text-gray-600 mb-4">No posts found with this tag</p>
+          <a
+            href="/tags"
+            class="text-skin-accent hover:text-skin-accent-dark"
+          >
+            ← Back to Tags
+          </a>
+        </div>
+      )
+    }
   </Main>
   <Footer />
 </Layout>

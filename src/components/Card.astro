@@ -1,0 +1,56 @@
+---
+// src/components/Card.astro
+import Datetime from "./Datetime";
+import type { Post } from "../types/post";
+
+export interface Props {
+  href: string;
+  frontmatter: {
+    title: string;
+    description?: string;
+    pubDatetime: Date;
+    tags?: string[];
+    author?: string;
+  };
+  secHeading?: boolean;
+}
+
+const { href, frontmatter, secHeading = true } = Astro.props;
+const { title, description, pubDatetime, tags, author } = frontmatter;
+---
+
+<li class="my-6">
+  <a
+    href={href}
+    class="inline-block text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+  >
+    {
+      secHeading ? (
+        <h2 class="text-lg font-medium decoration-dashed hover:underline">
+          {title}
+        </h2>
+      ) : (
+        <h3 class="text-lg font-medium decoration-dashed hover:underline">
+          {title}
+        </h3>
+      )
+    }
+  </a>
+  <Datetime datetime={pubDatetime} />
+  {author && <span class="ml-2 text-skin-base">by {author}</span>}
+  <p class="mt-2 text-skin-base">{description}</p>
+  {
+    tags && tags.length > 0 && (
+      <div class="mt-2 flex flex-wrap">
+        {tags.map(tag => (
+          <a
+            href={`/tags/${tag}`}
+            class="mr-2 mt-2 rounded-lg bg-skin-card px-2 py-1 text-xs hover:bg-skin-card-muted"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</li>

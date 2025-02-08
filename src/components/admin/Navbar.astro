@@ -2,17 +2,25 @@
 // components/admin/Navbar.astro
 import { Image } from "astro:assets";
 import type { APIRoute } from "astro";
+import  Search  from "../../components/admin/Search.astro";
 const { session } = Astro.props;
 
-// Get the user's email and role
-const email = session?.data?.session?.user?.email;
-const role = session?.data?.session?.user?.role;
+
+const { email, role } = session.data.session.user;
+
 ---
 
-<nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+<nav class="fixed top-0 z-50 w-full border-b border-skin-line bg-skin-fill">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
+        <button
+          data-drawer-target="logo-sidebar"
+          data-drawer-toggle="logo-sidebar"
+          aria-controls="logo-sidebar"
+          type="button"
+          class="inline-flex items-center rounded-lg p-2 text-sm text-skin-base hover:bg-skin-card focus:outline-none focus:ring-2 focus:ring-skin-accent sm:hidden"
+        >
         <button
           data-drawer-target="logo-sidebar"
           data-drawer-toggle="logo-sidebar"
@@ -35,12 +43,13 @@ const role = session?.data?.session?.user?.role;
           </svg>
         </button>
         <a href="/admin" class="ml-2 flex md:mr-24">
-          <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">
+          <span class="self-center whitespace-nowrap text-xl font-semibold text-skin-base sm:text-2xl">
             Admin Dashboard
           </span>
         </a>
       </div>
       <div class="flex items-center">
+        <Search />
         <div class="ml-3 flex items-center">
           <button
             type="button"
@@ -70,11 +79,11 @@ const role = session?.data?.session?.user?.role;
           </button>
           <!-- Dropdown menu -->
           <div
-            class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded bg-white text-base shadow dark:divide-gray-600 dark:bg-gray-700"
+            class="z-50 my-4 hidden list-none divide-y divide-gray-200 rounded bg-gray-100 text-base shadow dark:divide-gray-600 dark:bg-gray-700"
             id="user-dropdown"
           >
             <div class="px-4 py-3">
-              <span class="block truncate text-sm text-gray-500 dark:text-gray-400">
+              <span class="block truncate text-sm text-gray-500 dark:text-gray-500">
                 {email}
               </span>
               <span class="block text-sm text-gray-900 dark:text-white">

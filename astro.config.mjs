@@ -37,6 +37,16 @@ export default defineConfig({
     shikiConfig: {
       theme: "one-dark-pro",
       wrap: true,
+      langs: [],
+      transformers: [{
+          pre(node) {
+              node.properties.className = [
+                  ...(node.properties.className || []),
+                  'code-block'
+              ];
+              return node;
+          }
+      }]
     },
     extendDefaultPlugins: true,
   },

@@ -1,6 +1,7 @@
 ---
 // components/admin/AdminLayout.astro
 import type { AdminLayoutProps } from "../../types/props";
+import { supabase } from "../../lib/supabase";
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "./Navbar.astro";
 import Sidebar from "./Sidebar.astro";
@@ -8,21 +9,42 @@ import "@styles/admin.css";
 
 type Props = AdminLayoutProps;
 const { title, session } = Astro.props;
+
+// Fetch the user's profile data including Role
+const { data: profile, error: profileError } = session
+    ? await supabase
+      .from("profile")
+      .select(
+      `
+      id,
+      user_id,
+      username,
+      full_name,
+      email,
+      role,
+      bio,
+      created_at,
+      updated_at
+      `
+      )
+      .eq("user_id", session.data.session.user.id)
+      .single()
+    : { data: null, error: null };
+
+if (profileError) {
+  console.error("Error fetching profile:", profileError.message);
+}
 ---
 
 <Layout title={`Admin - ${title}`}>
-  <Navbar session={session} />
-  <Sidebar session={session} />
+  <div class="min-h-screen bg-skin-fill">
+    <Navbar profile={ profile } />
+    <Sidebar profile={ profile } />
 
-  <div class="p-4 sm:ml-64">
-    <div class="mt-14 p-4">
-      <slot />
+    <div class="p-4 sm:ml-64">
+      <div class="mt-14 rounded-lg p-4 shadow-md">
+        <slot />
+      </div>
     </div>
   </div>
 </Layout>
-
-<script>
-  // Initialize Flowbite
-  import { initFlowbite } from "flowbite";
-  initFlowbite();
-</script>

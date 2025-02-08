@@ -1,25 +1,35 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
-import Card from "@components/Card";
+import Card from "@components/Card.astro";
 import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import slugify from "@utils/slugify";
-import { SOCIALS } from "@config";
+import { SOCIALS, SITE } from "@config";
+import { supabase } from "../lib/supabase";
+import type { Post } from "../types/post";
 
-// We need to get all the posts from the blog and series collections and combine them into one array called posts
-const blogs = await getCollection("blog");
-const series = await getCollection("series");
-const posts = [...blogs, ...series];
 
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(
-  ({ data }) => (data as { featured: boolean }).featured
-);
+// Fetch posts from Supabase
+const { data: posts, error } = await supabase
+  .from('posts')
+  .select(`
+    *,
+    profile:author_id (
+      username,
+      full_name
+    )
+  `)
+  .eq('published', true)
+  .order('created_at', { ascending: false });
+
+if (error) {
+  console.error('Error fetching posts:', error);
+}
+
+const sortedPosts = posts || [];
+const featuredPosts = sortedPosts.filter(post => post.tags?.includes('featured'));
 
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
@@ -82,10 +92,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           <section id="featured">
             <h2>Featured</h2>
             <ul>
-              {featuredPosts.map(({ data }) => (
+              {featuredPosts.map((post: Post) => (
                 <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
+                  href={`/post/${post.slug}`}
+                  frontmatter={{
+                    title: post.title,
+                    description: post.description || "",
+                    pubDatetime: new Date(post.created_at),
+                  }}
                   secHeading={false}
                 />
               ))}
@@ -100,27 +114,30 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       <h2>Recent Posts</h2>
       <ul>
         {
-          sortedPosts.map(
-            ({ data }, index) =>
-              index < 10 && (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              )
-          )
+          sortedPosts.slice(0, 10).map((post: Post) => (
+            <Card
+              href={`/post/${post.slug}`}
+              frontmatter={{
+                title: post.title,
+                description: post.description || "",
+                pubDatetime: new Date(post.created_at),
+                tags: post.tags || []
+              }}
+              secHeading={false}
+            />
+          ))
         }
       </ul>
+
       <div class="all-posts-btn-wrapper">
-        <LinkButton href="/posts">
+        <!-- <LinkButton href="/posts">
           All Posts
           <svg xmlns="http://www.w3.org/2000/svg"
             ><path
               d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
             ></path>
           </svg>
-        </LinkButton>
+        </LinkButton> -->
       </div>
     </section>
   </main>

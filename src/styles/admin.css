@@ -1,5 +1,42 @@
-```css
 /* admin.css */
+body {
+  @apply bg-skin-fill text-skin-base;
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  @apply w-full rounded-lg border border-skin-line bg-skin-card p-2 text-skin-base focus:border-skin-accent focus:outline-none focus:ring-2 focus:ring-skin-accent/50;
+}
+/* Buttons */
+.btn-primary {
+  @apply rounded-lg bg-skin-accent px-4 py-2 text-white hover:bg-skin-accent/90 focus:outline-none focus:ring-2 focus:ring-skin-accent/50;
+}
+
+.btn-secondary {
+  @apply rounded-lg bg-skin-card px-4 py-2 text-skin-base hover:bg-skin-card-muted focus:outline-none focus:ring-2 focus:ring-skin-accent/50;
+}
+
+/* Tables */
+table {
+  @apply w-full text-left text-sm;
+}
+
+th {
+  @apply border-b border-skin-line bg-skin-card p-4 font-medium text-skin-base;
+}
+
+td {
+  @apply border-b border-skin-line p-4;
+}
+
+tr:hover {
+  @apply bg-skin-card-muted;
+}
 
 /* General Admin Page Styles */
 body.admin {
@@ -18,6 +55,7 @@ body.admin {
 
 /* Admin Card Styles */
 .admin-card {
+  @apply rounded-lg border border-skin-line bg-skin-card p-4 shadow-sm;
   border: 1px solid #e5e7eb; /* Light gray border */
   border-radius: 0.5rem; /* Rounded corners */
   padding: 1rem;
@@ -25,8 +63,32 @@ body.admin {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
+/* Status Badges */
+.status-badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.status-badge-published {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+}
+
+.status-badge-draft {
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+}
+
+/* Preview Area */
+.preview-area {
+  @apply rounded-lg border border-skin-line bg-skin-card p-4;
+}
+
+/* Editor Area */
+.editor-area {
+  @apply rounded-lg border border-skin-line bg-skin-card p-4 font-mono;
+}
+
 /* Admin Button Styles */
 .admin-btn-primary {
+  @apply rounded-lg bg-skin-accent px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-skin-accent focus:ring-offset-2;
   background-color: #2563eb; /* Primary blue */
   color: #ffffff; /* White text */
   padding: 0.5rem 1rem;
@@ -40,6 +102,7 @@ body.admin {
 }
 
 .admin-btn-secondary {
+  @apply rounded-lg bg-skin-card px-4 py-2 text-sm font-medium text-skin-base hover:bg-skin-card-muted focus:outline-none focus:ring-2 focus:ring-skin-accent focus:ring-offset-2;
   background-color: #e5e7eb; /* Light gray */
   color: #1f2937; /* Dark text */
   padding: 0.5rem 1rem;
@@ -86,12 +149,14 @@ body.admin {
 
 /* Admin Table Styles */
 .admin-table {
+  @apply w-full rounded-lg bg-skin-card;
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
 }
 
 .admin-table th {
+  @apply bg-skin-card-muted px-4 py-3 text-left text-sm font-semibold text-skin-base;
   background-color: #f3f4f6; /* Light gray header background */
   color: #1f2937; /* Dark text */
   font-weight: 600;
@@ -101,16 +166,19 @@ body.admin {
 }
 
 .admin-table td {
+  @apply border-t border-skin-line px-4 py-3 text-sm text-skin-base;
   padding: 0.75rem;
   border-bottom: 1px solid #e5e7eb; /* Light gray border */
 }
 
 .admin-table tr:hover {
+  @apply bg-skin-card-muted transition-colors;
   background-color: #f9fafb; /* Light gray hover effect */
 }
 
 /* Admin Input Styles */
 .admin-input {
+  @apply block w-full rounded-lg border border-skin-line bg-skin-fill p-2.5 text-sm text-skin-base placeholder-gray-400 focus:border-skin-accent focus:ring-skin-accent;
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #d1d5db; /* Light gray border */
@@ -128,6 +196,7 @@ body.admin {
 
 /* Admin Badge Styles */
 .admin-badge {
+  @apply rounded-full bg-skin-card-muted px-2.5 py-0.5 text-xs font-medium text-skin-base;
   display: inline-block;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
@@ -148,4 +217,48 @@ body.admin {
 .admin-badge-error {
   background-color: #fee2e2; /* Light red background */
   color: #991b1b; /* Dark red text */
+}
+
+.admin-table-container {
+  @apply relative overflow-x-auto shadow-md sm:rounded-lg;
+}
+
+.admin-table {
+  @apply w-full text-left text-sm;
+}
+
+.admin-table thead {
+  @apply bg-skin-card-muted text-xs uppercase;
+}
+
+.admin-table th {
+  @apply px-6 py-3;
+}
+
+.admin-table tbody tr {
+  @apply border-b bg-skin-card hover:bg-skin-card-muted;
+}
+
+.admin-table td {
+  @apply px-6 py-4;
+}
+
+.admin-badge {
+  @apply rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.admin-badge-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.admin-badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.admin-link {
+  @apply font-medium text-blue-600 hover:underline dark:text-blue-500;
+}
+
+.admin-link-danger {
+  @apply font-medium text-red-600 hover:underline dark:text-red-500;
 }

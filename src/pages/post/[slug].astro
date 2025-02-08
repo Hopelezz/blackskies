@@ -1,0 +1,105 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Tag from "../../components/Tag.astro";
+import Datetime from "../../components/Datetime";
+import type { Post } from "../../types/post";
+import { supabase } from "../../lib/supabase";
+import { marked } from 'marked'; // For markdown rendering
+
+export const prerender = true;
+export async function getStaticPaths() {
+  const { data: posts, error } = await supabase
+    .from('posts')
+    .select('slug')
+    .eq('published', true);
+
+  if (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+
+  return posts.map(post => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Fetch the post data
+const { data: post, error } = await supabase
+  .from('posts')
+  .select(`
+    *,
+    profile:author_id (
+      username,
+      full_name
+    )
+  `)
+  .eq('slug', slug)
+  .eq('published', true)
+  .single();
+
+if (error || !post) {
+  return Astro.redirect('/404');
+}
+
+// Convert markdown content to HTML
+const content = marked(post.content);
+
+const ogUrl = new URL(`${post.title}.png`, Astro.url.origin).href;
+---
+
+<Layout 
+  title={post.title}
+  author={post.profile?.full_name}
+  description={post.description}
+  ogImage={ogUrl}
+>
+  <Header />
+  <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
+    <button
+      class="focus-outline mb-2 mt-8 flex hover:opacity-75"
+      onclick="history.back()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
+      </svg>
+      <span>Go back</span>
+    </button>
+  </div>
+  <main id="main-content">
+    <h1 class="post-title">{post.title}</h1>
+    <div class="flex items-center space-x-4">
+      <Datetime datetime={post.created_at} size="lg" className="my-2" />
+      {post.profile?.full_name && (
+        <span class="text-skin-base">by {post.profile.full_name}</span>
+      )}
+    </div>
+
+    <article
+      id="article"
+      role="article"
+      class="prose mx-auto mt-8 max-w-3xl"
+      set:html={content}
+    />
+
+    <ul class="tags-container">
+      {post.tags?.map((tag: string) => <Tag name={tag} />)}
+    </ul>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  main {
+    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+  }
+  .post-title {
+    @apply text-2xl font-semibold text-skin-accent;
+  }
+  .tags-container {
+    @apply my-8;
+  }
+</style>

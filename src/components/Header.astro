@@ -43,7 +43,7 @@ const { activeNav } = Astro.props;
         </button>
         <ul id="menu-items" class="display-none sm:flex">
           <li>
-            <a href="/posts" class={activeNav === "posts" ? "active" : ""}>
+            <a href="/post" class={activeNav === "posts" ? "active" : ""}>
               Posts
             </a>
           </li>
@@ -57,7 +57,7 @@ const { activeNav } = Astro.props;
               About
             </a>
           </li>
-          <li>
+          <!-- <li>
             <LinkButton
               href="/search"
               className={`focus-outline p-3 sm:p-1 ${
@@ -74,7 +74,7 @@ const { activeNav } = Astro.props;
                 ></path>
               </svg>
             </LinkButton>
-          </li>
+          </li> -->
           <li>
             <button
               id="theme-btn"

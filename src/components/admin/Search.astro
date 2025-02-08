@@ -1,0 +1,144 @@
+---
+// src/components/admin/Search.astro
+---
+
+<div class="relative flex-1 max-w-lg">
+    <input
+      type="search"
+      id="admin-search"
+      class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500"
+      placeholder="Search posts, users..."
+    />
+    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <!-- <svg
+        class="w-4 h-4 text-gray-500"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 20 20"
+      > -->
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+        />
+      </svg>
+    </div>
+    <div
+      id="search-results"
+      class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg hidden"
+    >
+    </div>
+  </div>
+  
+  <script>
+    let debounceTimer: NodeJS.Timeout;
+    const searchInput = document.getElementById("admin-search") as HTMLInputElement;
+    const searchResults = document.getElementById("search-results");
+  
+    async function performSearch(query: string) {
+      if (!query.trim()) {
+        searchResults!.innerHTML = "";
+        searchResults!.classList.add("hidden");
+        return;
+      }
+  
+      try {
+        const response = await fetch(`/api/admin/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+  
+        if (data.results && data.results.length > 0) {
+          searchResults!.innerHTML = data.results
+            .map(
+              (result: any) => `
+                <a 
+                  href="${getResultLink(result)}" 
+                  class="block px-4 py-2 hover:bg-gray-100 border-b last:border-b-0"
+                >
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <div class="text-sm font-medium text-gray-900">${result.title || result.full_name || result.email}</div>
+                      <div class="text-xs text-gray-500">
+                        ${result.type.charAt(0).toUpperCase() + result.type.slice(1)} • 
+                        ${new Date(result.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded-full ${getStatusColor(result)}">
+                      ${getStatusText(result)}
+                    </span>
+                  </div>
+                </a>
+              `
+            )
+            .join("");
+          searchResults!.classList.remove("hidden");
+        } else {
+          searchResults!.innerHTML = `
+            <div class="px-4 py-2 text-sm text-gray-500">
+              No results found
+            </div>
+          `;
+          searchResults!.classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error("Search error:", error);
+        searchResults!.innerHTML = `
+          <div class="px-4 py-2 text-sm text-red-500">
+            Error performing search
+          </div>
+        `;
+        searchResults!.classList.remove("hidden");
+      }
+    }
+  
+    function getResultLink(result: any) {
+      switch (result.type) {
+        case 'post':
+          return `/admin/posts/${result.id}/edit`;
+        case 'user':
+          return `/admin/users/${result.id}`;
+        default:
+          return '#';
+      }
+    }
+  
+    function getStatusColor(result: any) {
+      if (result.type === 'post') {
+        return result.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+      }
+      return 'bg-blue-100 text-blue-800';
+    }
+  
+    function getStatusText(result: any) {
+      if (result.type === 'post') {
+        return result.published ? 'Published' : 'Draft';
+      }
+      return result.role || 'User';
+    }
+  
+    searchInput?.addEventListener("input", (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        performSearch((e.target as HTMLInputElement).value);
+      }, 300);
+    });
+  
+    // Close search results when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        !searchInput?.contains(e.target as Node) &&
+        !searchResults?.contains(e.target as Node)
+      ) {
+        searchResults!.classList.add("hidden");
+      }
+    });
+  
+    // Handle keyboard navigation
+    searchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        searchResults!.classList.add("hidden");
+      }
+    });
+  </script>

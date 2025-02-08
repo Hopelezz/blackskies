@@ -4,10 +4,12 @@ import AdminLayout from "../../components/admin/AdminLayout.astro";
 import { supabase } from "../../lib/supabase";
 import DashboardStats from "../../components/admin/DashboardStats.astro";
 import PostsTable from "../../components/admin/PostsTable.astro";
+import { getSession } from "../../utils/auth";
 
-import { checkAuth } from "../../utils/middleware";
-
-const session = await checkAuth(Astro);
+const session = await getSession(Astro);
+if (!session) {
+  return Astro.redirect("/admin/signin");
+}
 
 const { data: posts } = await supabase
   .from("posts")
@@ -16,25 +18,25 @@ const { data: posts } = await supabase
   .limit(5);
 
 // Fetch the user's profile data including Role
-const { data: profile, error: profileError } = session
-  ? await supabase
+  const { data: profile, error: profileError } = session
+    ? await supabase
       .from("profile")
       .select(
-        `
-        id,
-        user_id,
-        username,
-        full_name,
-        email,
-        role,
-        bio,
-        created_at,
-        updated_at
+      `
+      id,
+      user_id,
+      username,
+      full_name,
+      email,
+      role,
+      bio,
+      created_at,
+      updated_at
       `
       )
       .eq("user_id", session.data.session.user.id)
       .single()
-  : { data: null, error: null };
+    : { data: null, error: null };
 
 if (profileError) {
   console.error("Error fetching profile:", profileError.message);

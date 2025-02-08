@@ -1,6 +1,7 @@
 ---
 import { SITE } from "@config";
 import "@styles/base.css";
+import ThemeProvider from "@components/ThemeProvider.astro";
 import Cursor from "../components/cursorEffect/Cursor.astro";
 
 export interface Props {
@@ -60,22 +61,15 @@ const socialImageURL = new URL(
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+    <ThemeProvider />
     <!-- Flowbite CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css"
-    />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" />
+
     <Cursor />
   </head>
   <body>
     <slot />
 
     <!-- Flowbite JS -->
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js" />
 </html>
-
-<script>
-  // Initialize Flowbite
-  import 'flowbite';
-</script>

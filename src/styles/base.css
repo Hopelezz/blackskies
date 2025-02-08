@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@source "../node_modules/flowbite";
+
+
 
 @layer base {
   :root,
@@ -115,5 +116,43 @@
   }
   .focus-outline {
     @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
+  }
+
+  /* Target code blocks specifically */
+  .prose pre[class*="language-"] {
+    @apply my-4 overflow-x-auto rounded-lg !bg-skin-card p-4;
+  }
+
+  .prose pre[class*="language-"] code {
+    @apply !bg-transparent !p-0 !text-skin-base;
+  }
+
+  /* Increase specificity for Shiki tokens */
+  .prose pre[class*="language-"] .shiki,
+  .prose pre[class*="language-"] .shiki span {
+    @apply !text-inherit;
+    color: var(--shiki-color) !important;
+    background-color: var(--shiki-bg) !important;
+    font-style: var(--shiki-font-style) !important;
+    font-weight: var(--shiki-font-weight) !important;
+    text-decoration: var(--shiki-text-decoration) !important;
+  }
+
+  /* Additional syntax highlighting customization */
+  .prose :not(pre) > code {
+    @apply rounded-md border border-skin-line bg-skin-card px-1 py-0.5;
+  }
+  
+    /* Flowbite overrides for admin routes */
+  [data-admin-route] {
+    @apply bg-skin-fill text-skin-base;
+    
+    .flowbite-button {
+      @apply bg-skin-accent text-skin-inverted;
+    }
+    
+    .flowbite-card {
+      @apply bg-skin-card;
+    }
   }
 }
